@@ -10,6 +10,7 @@ extern "C" {
 #include <QObject>
 #include <QStringList>
 #include <QList>
+#include <QtGlobal> 
 
 //TODO класс singleton который будет держать ffmpeg проинициализированным
 //singleton держащий ffmpeg инициализированным
@@ -23,6 +24,7 @@ protected:
 	~LibAVC();
 };
 
+
 class FileFormats : public QObject
 {
 	Q_OBJECT
@@ -31,12 +33,29 @@ public:
 	QStringList getAvailableDecodeFileFormats() const;
 	QStringList getAvailableEncodeFileFormats() const;
 private:
-	typedef struct {
-		bool decode, encode : 1;
-		QString name, long_name;
-	} codecT;
+	// typedef struct {
+	// 	bool decode, encode : 1;
+	// 	QString name, long_name;
+	// } FileFormatsT;
 	
-	QList<codecT> allCodecs;
+	QStringList encodeFileFormats;
+	QStringList decodeFileFormats;
+};
+
+//TODO реализовать
+class Codecs : public QObject
+{
+	Q_OBJECT
+};
+
+class FileInfo : public QObject
+{
+	Q_OBJECT
+public:
+	FileInfo(QObject* parent = 0);
+	void setFilename(QString);
+private:
+
 };
 
 #endif //FFMPEG_MY_H
