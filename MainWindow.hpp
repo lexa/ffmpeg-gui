@@ -26,6 +26,7 @@ extern "C" {
 #include <libavutil/avstring.h>
 }
 
+#include "FFMPEG.hpp"
 
 class SelectionInputFile : public QWidget
 {

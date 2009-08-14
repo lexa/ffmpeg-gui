@@ -99,17 +99,17 @@ MainWindow::MainWindow (QWidget *parent)
 	:QWidget(parent)
 {
 	inputFileName = new SelectionInputFile();
-//	FileInfo *inputFile = new FileInfo;
+	FileInfo *inputFile = new FileInfo;
 	SelectionOutputContainer* outputContainer = new SelectionOutputContainer;
 
 	QVBoxLayout *layoutMain = new QVBoxLayout;
 	layoutMain->addWidget(inputFileName);
-//	layoutMain->addWidget(inputFile);
+	layoutMain->addWidget(inputFile);
 	layoutMain->addWidget(outputContainer);
 	layoutMain->addWidget(new QPushButton("111"));
 	setLayout(layoutMain);
 	
-//	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), inputFile, SLOT(updateInfo(QString))); 
+	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), inputFile, SLOT(setFilename(QString))); 
 //	new Codecs;
 	setWindowTitle(tr("ffmpeg-gui"));
 }

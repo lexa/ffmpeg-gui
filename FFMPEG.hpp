@@ -3,6 +3,7 @@
 
 extern "C" {
 #include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
 }
 
 
@@ -11,6 +12,14 @@ extern "C" {
 #include <QStringList>
 #include <QList>
 #include <QtGlobal> 
+#include <QtGlobal>
+#include <QtDebug>
+#include <QTreeWidget>
+#include <QVBoxLayout>
+#include <QTreeWidgetItem>
+
+#include <iostream>
+
 
 //TODO класс singleton который будет держать ffmpeg проинициализированным
 //singleton держащий ffmpeg инициализированным
@@ -21,7 +30,10 @@ private:
 	static LibAVC* uniqueInstance;
 protected:
 	LibAVC();
+	LibAVC(LibAVC*);
+	LibAVC* operator=(LibAVC*);
 	~LibAVC();
+	
 };
 
 
@@ -48,14 +60,17 @@ class Codecs : public QObject
 	Q_OBJECT
 };
 
-class FileInfo : public QObject
+//виджет отображающий информацию о файле
+class FileInfo : 
+	public QWidget
 {
 	Q_OBJECT
 public:
-	FileInfo(QObject* parent = 0);
+	FileInfo(QWidget* parent = 0);
+public slots:
 	void setFilename(QString);
 private:
-
+	QTreeWidget *tree;
 };
 
 #endif //FFMPEG_MY_H

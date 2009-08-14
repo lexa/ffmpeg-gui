@@ -112,7 +112,6 @@ FileFormats::FileFormats(QObject *parent)
 			}
 			if(name && strcmp(ifmt->name, name)==0)
 				decode = 1;
-
 		}
 		if(name==NULL)
 			break;
@@ -122,7 +121,6 @@ FileFormats::FileFormats(QObject *parent)
 			decodeFileFormats.append(name);
 		if (encode)
 			encodeFileFormats.append(name);
-//		allFileFormats.append(tmp);
 	}
 }
 
@@ -140,13 +138,77 @@ FileFormats::getAvailableEncodeFileFormats() const
 
 
 
-FileInfo::FileInfo(QObject *parent)
-	:QObject(parent)
+FileInfo::FileInfo(QWidget *parent)
+	:QWidget(parent)
 {
+	tree = new QTreeWidget;
+	tree->setColumnCount(2);
+	tree->setHeaderItem(new QTreeWidgetItem(QStringList(tr("type")) << "value"));
+	QVBoxLayout *layout = new QVBoxLayout;
+	layout->addWidget (tree);
+	setLayout (layout);
 }
 
 void
 FileInfo::setFilename(QString filename)
 {
+	LibAVC::instance();
+	AVFormatContext *pFormatCtx;
+	int err;
+//	std::cerr << filename.toUtf8().data();
+//	printf("filename : %s\n", filename.toStdString().c_str());
+
+
+	if(0 != (err = av_open_input_file(&pFormatCtx, filename.toUtf8().data(), NULL, 0, NULL)))
+	{
+		qWarning() << "av_open_input_file" << err;
+		return ;
+	}
+	// Retrieve stream information
+	if(0 > (err = av_find_stream_info(pFormatCtx)))
+	{
+		qWarning() << "av_find_stream_info" ;
+		return ;
+	}
+
+//	dump_format(pFormatCtx, 0, "нужный файл", 0);//for debugging
 	
+	tree->clear();
+	QTreeWidgetItem* container =  new QTreeWidgetItem(QStringList(tr("Container")) << pFormatCtx->iformat->name);
+	tree->addTopLevelItem (container);
+	for(unsigned int i=0; i<pFormatCtx->nb_streams; i++) 
+	{
+		QString num;
+		num.setNum(i);
+		QStringList fields(QString(tr("Stream ")) + num);
+		//("Stream") << pFormatCtx->streams[i]->codec->codec_name;
+		// AVCodecContext *pCodecCtx =  pFormatCtx->streams[i]->codec;
+		// switch (pCodecCtx->codec_type)
+		// {
+		// case    CODEC_TYPE_UNKNOWN  : fields << "UNKNOWN"; break ;
+		// case    CODEC_TYPE_VIDEO : fields << "VIDEO"; break ;
+		// case 	CODEC_TYPE_AUDIO : fields << "AUDIO"; break ;
+		// case	CODEC_TYPE_DATA : fields << "DATA"; break ;
+		// case	CODEC_TYPE_SUBTITLE : fields << "SUBTITLE"; break ;
+		// case	CODEC_TYPE_NB : fields << "NB"; break ;
+		// default: 
+		// 	fields << "undefined type"; break ;
+		// }
+//		AVCodec *pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
+//		if(pCodec == NULL) {
+//			qWarning() << "Unsupported codec!";
+			//TODO отмечать в графике это
+//		}
+
+		char buf[256];
+		avcodec_string(buf, sizeof(buf), pFormatCtx->streams[i]->codec, false);//шоцетаке ?
+//		qWarning(buf);
+		fields << buf;
+		
+
+		QTreeWidgetItem* stream = new QTreeWidgetItem(fields );
+		container->addChild(stream);
+	}
+
+
 }
