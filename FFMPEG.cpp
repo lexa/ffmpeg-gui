@@ -20,76 +20,19 @@ LibAVC::~LibAVC()
 //	av_exit(0);//FIXME это точно нормально?
 }
 
-// void 
-// getAvailableFileFormats(void)
-// {
-// 	AVInputFormat *ifmt=NULL;
-// 	AVOutputFormat *ofmt=NULL;
-// 	URLProtocol *up=NULL;
-// 	AVCodec *p=NULL, *p2;
-// 	AVBitStreamFilter *bsf=NULL;
-// 	const char *last_name;
-	
-// 	LibAVC::instance();//убедились что всё наместе
-	
-// //	printf("File formats:\n");
-// 	last_name= "000";
-// 	for(;;){
-// 		int decode=0;
-// 		int encode=0;
-// 		const char *name=NULL;
-// 		const char *long_name=NULL;
-
-// 		while((ofmt= av_oformat_next(ofmt))) {
-// 			if((name == NULL || strcmp(ofmt->name, name)<0) &&
-// 			   strcmp(ofmt->name, last_name)>0){
-// 				name= ofmt->name;
-// 				long_name= ofmt->long_name;
-// 				encode=1;
-// 			}
-// 		}
-// 		while((ifmt= av_iformat_next(ifmt))) {
-// 			if((name == NULL || strcmp(ifmt->name, name)<0) &&
-// 			   strcmp(ifmt->name, last_name)>0){
-// 				name= ifmt->name;
-// 				long_name= ifmt->long_name;
-// 				encode=0;
-// 			}
-// 			if(name && strcmp(ifmt->name, name)==0)
-// 				decode=1;
-// 		}
-// 		if(name==NULL)
-// 			break;
-// 		last_name= name;
-
-// 		printf(
-// 			" %s%s %-15s %s\n",
-// 			decode ? "D":" ",
-// 			encode ? "E":" ",
-// 			name,
-// 			long_name ? long_name:" ");
-// 	}
-// 	printf("\n");
-// }
 
 
 FileFormats::FileFormats(QObject *parent)
 	:QObject(parent)
 {
-//	allFileFormats = getAvailableFileFormats();
 	AVInputFormat *ifmt=NULL;
 	AVOutputFormat *ofmt=NULL;
-//	URLProtocol *up=NULL;
-//	AVCodec *p=NULL, *p2;
-//	AVBitStreamFilter *bsf=NULL;
 	const char *last_name;
 	
 	LibAVC::instance();//убедились что всё наместе
 	
-//	printf("File formats:\n");
 	last_name= "000";
 	for(;;){
-//		FileFormatsT tmp;
 		int decode=0;
 		int encode=0;
 		const char *name=NULL;
@@ -122,6 +65,90 @@ FileFormats::FileFormats(QObject *parent)
 		if (encode)
 			encodeFileFormats.append(name);
 	}
+}
+
+Codecs::Codecs(QObject* parent):
+	QObject(parent)
+{
+    AVInputFormat *ifmt=NULL;
+    AVOutputFormat *ofmt=NULL;
+    URLProtocol *up=NULL;
+    AVCodec *p=NULL, *p2;
+    AVBitStreamFilter *bsf=NULL;
+    const char *last_name;
+
+    LibAVC::instance();//убедились что всё наместе
+    printf("Codecs:\n");
+    last_name= "000";
+    for(;;){
+        int decode=0;
+        int encode=0;
+        int cap=0;
+
+        p2=NULL;
+        while((p= av_codec_next(p))) {
+            if((p2==NULL || strcmp(p->name, p2->name)<0) &&
+                strcmp(p->name, last_name)>0){
+                p2= p;
+                decode= encode= cap=0;
+            }
+            if(p2 && strcmp(p->name, p2->name)==0){
+                if(p->decode) decode=1;
+                if(p->encode) encode=1;
+                cap |= p->capabilities;
+            }
+        }
+        if(p2==NULL)
+            break;
+        last_name= p2->name;
+
+	CodecT tmp;
+	tmp.name = p2->name;
+	tmp.type = p2->type;
+	tmp.coder = (decode ? DECODE : 0) | (encode ? ENCODE : 0);
+
+	allCodecs.append(tmp);
+       //  printf(
+       //      " %s%s%s%s%s%s %-15s %s",
+       //      decode ? "D": (/*p2->decoder ? "d":*/" "),
+       //      encode ? "E":" ",
+       //      type_str,
+       //      cap & CODEC_CAP_DRAW_HORIZ_BAND ? "S":" ",
+       //      cap & CODEC_CAP_DR1 ? "D":" ",
+       //      cap & CODEC_CAP_TRUNCATED ? "T":" ",
+       //      p2->name,
+       //      p2->long_name ? p2->long_name : "");
+       // /* if(p2->decoder && decode==0)
+       //      printf(" use %s for decoding", p2->decoder->name);*/
+       //  printf("\n");
+	
+    }
+
+    printf("Frame size, frame rate abbreviations:\n ntsc pal qntsc qpal sntsc spal film ntsc-film sqcif qcif cif 4cif\n");
+    printf("\n");
+    printf(
+"Note, the names of encoders and decoders do not always match, so there are\n"
+"several cases where the above table shows encoder only or decoder only entries\n"
+"even though both encoding and decoding are supported. For example, the h263\n"
+"decoder corresponds to the h263 and h263p encoders, for file formats it is even\n"
+"worse.\n");
+
+}
+
+QStringList 
+Codecs::getAvailableCodecs(CodecType type, int coder) const
+{
+	QList <CodecT>::iterator c(allCodecs.begin());
+	QStringList rez;
+
+	for(; c != allCodecs.end(); c++) 
+	{
+		if ((c->type == type) && (coder & c->coder))
+		{
+			rez.append (c->name);
+		}
+	}
+	return rez;
 }
 
 QStringList
@@ -209,6 +236,32 @@ FileInfo::setFilename(QString filename)
 		QTreeWidgetItem* stream = new QTreeWidgetItem(fields );
 		container->addChild(stream);
 	}
+}
 
+// GenericChooseFormat::GenericChooseFormat (QWidget* parent)
+// 	:QWidget (parent)
+// {
+// }
 
+ChooseFileFormat::ChooseFileFormat (QWidget* parent)
+	:QWidget (parent)
+{
+	FileFormats availFormats;
+	QComboBox* combobox = new QComboBox;
+	QHBoxLayout *layout = new QHBoxLayout;
+	layout->addWidget(combobox);
+	combobox->addItems(availFormats.getAvailableEncodeFileFormats());
+	setLayout(layout);
+}
+
+QString
+ChooseFileFormat::getFormat()
+{
+	return format;
+}
+
+void
+ChooseFileFormat::setFormat(const QString text)
+{
+	format = text;
 }

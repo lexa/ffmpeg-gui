@@ -102,9 +102,13 @@ MainWindow::MainWindow (QWidget *parent)
 	FileInfo *inputFile = new FileInfo;
 	SelectionOutputContainer* outputContainer = new SelectionOutputContainer;
 
+
+	ChooseFileFormat* tmp = new ChooseFileFormat();
+
 	QVBoxLayout *layoutMain = new QVBoxLayout;
 	layoutMain->addWidget(inputFileName);
 	layoutMain->addWidget(inputFile);
+	layoutMain->addWidget(tmp);
 	layoutMain->addWidget(outputContainer);
 	layoutMain->addWidget(new QPushButton("111"));
 	setLayout(layoutMain);

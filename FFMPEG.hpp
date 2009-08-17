@@ -17,6 +17,7 @@ extern "C" {
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QTreeWidgetItem>
+#include <QComboBox>
 
 #include <iostream>
 
@@ -54,10 +55,22 @@ private:
 	QStringList decodeFileFormats;
 };
 
-//TODO реализовать
+enum Appointment {DECODE=1, ENCODE=2};
 class Codecs : public QObject
 {
 	Q_OBJECT
+	
+public:
+	Codecs(QObject* parent = 0);
+//	enum CodecType {CODEC_TYPE_SUBTITLE CODEC_TYPE_VIDEO CODEC_TYPE_AUDIO}
+	QStringList getAvailableCodecs(CodecType type, int coder /* Appointment*/) const;
+private:
+	struct CodecT {
+		CodecType type;
+		int coder;//Appointment
+		QString name;
+	};
+	mutable QList <CodecT> allCodecs;
 };
 
 //виджет отображающий информацию о файле
@@ -72,5 +85,38 @@ public slots:
 private:
 	QTreeWidget *tree;
 };
+
+//виджет в котором можно выбрать параметры кодеков и формата, этот класс просто чтоб от него наследовать виджеты которые реально что-то выбирают
+class GenericChooseFormat 
+{
+public:
+//	GenericChooseFormat ();
+	virtual QString getFormat() =0;
+	virtual ~GenericChooseFormat() ;
+};
+
+//виджет в котором можно выбрать тип контейнера в который конвертить
+class ChooseFileFormat :
+	public QWidget
+{
+	Q_OBJECT
+public:
+	ChooseFileFormat (QWidget* parent = 0);
+	virtual QString getFormat();//возращает выбраный формат файла (опция -f)
+	virtual ~ChooseFileFormat() {};
+private:
+	QString format;
+private slots:
+	void setFormat(const QString);
+};
+
+//виджет который содержит элементы для управления кодеком/контэйнером
+//определять виджет по его типу
+// class ChooseParameters : 
+// 	public QWidget
+// {
+// 	Q_OBJECT
+
+// }
 
 #endif //FFMPEG_MY_H

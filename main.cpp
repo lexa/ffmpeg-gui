@@ -15,7 +15,10 @@ int main(int argc, char *argv[])
 	// FileFormats  tmp;
 	// qWarning() <<  tmp.getAvailableEncodeFileFormats();
 	// FileInfo fileInfo;
+
 	// fileInfo.setFilename("/home/lexa/tmp/ffmpeg/movie.avi");
-		
+	
+	Codecs tmp;
+	qWarning() << tmp.getAvailableCodecs(CODEC_TYPE_VIDEO, ENCODE | DECODE);
 	return app.exec();
 }
