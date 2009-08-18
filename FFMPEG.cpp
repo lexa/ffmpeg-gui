@@ -70,15 +70,10 @@ FileFormats::FileFormats(QObject *parent)
 Codecs::Codecs(QObject* parent):
 	QObject(parent)
 {
-    AVInputFormat *ifmt=NULL;
-    AVOutputFormat *ofmt=NULL;
-    URLProtocol *up=NULL;
     AVCodec *p=NULL, *p2;
-    AVBitStreamFilter *bsf=NULL;
     const char *last_name;
 
     LibAVC::instance();//убедились что всё наместе
-    printf("Codecs:\n");
     last_name= "000";
     for(;;){
         int decode=0;
@@ -123,16 +118,6 @@ Codecs::Codecs(QObject* parent):
        //  printf("\n");
 	
     }
-
-    printf("Frame size, frame rate abbreviations:\n ntsc pal qntsc qpal sntsc spal film ntsc-film sqcif qcif cif 4cif\n");
-    printf("\n");
-    printf(
-"Note, the names of encoders and decoders do not always match, so there are\n"
-"several cases where the above table shows encoder only or decoder only entries\n"
-"even though both encoding and decoding are supported. For example, the h263\n"
-"decoder corresponds to the h263 and h263p encoders, for file formats it is even\n"
-"worse.\n");
-
 }
 
 QStringList 
@@ -165,49 +150,49 @@ FileFormats::getAvailableEncodeFileFormats() const
 
 
 
-FileInfo::FileInfo(QWidget *parent)
-	:QWidget(parent)
-{
-	tree = new QTreeWidget;
-	tree->setColumnCount(2);
-	tree->setHeaderItem(new QTreeWidgetItem(QStringList(tr("type")) << "value"));
-	QVBoxLayout *layout = new QVBoxLayout;
-	layout->addWidget (tree);
-	setLayout (layout);
-}
+// FileInfo::FileInfo(QWidget *parent)
+// 	:QWidget(parent)
+// {
+// 	tree = new QTreeWidget;
+// 	tree->setColumnCount(2);
+// 	tree->setHeaderItem(new QTreeWidgetItem(QStringList(tr("type")) << "value"));
+// 	QVBoxLayout *layout = new QVBoxLayout;
+// 	layout->addWidget (tree);
+// 	setLayout (layout);
+// }
 
-void
-FileInfo::setFilename(QString filename)
+QList<QPair<CodecType, QString>  >
+FileInfo(QString filename)
 {
 	LibAVC::instance();
+
 	AVFormatContext *pFormatCtx;
 	int err;
-//	std::cerr << filename.toUtf8().data();
-//	printf("filename : %s\n", filename.toStdString().c_str());
-
+	QList<QPair<CodecType, QString> > rez;
 
 	if(0 != (err = av_open_input_file(&pFormatCtx, filename.toUtf8().data(), NULL, 0, NULL)))
 	{
 		qWarning() << "av_open_input_file" << err;
-		return ;
+		return rez;
 	}
 	// Retrieve stream information
 	if(0 > (err = av_find_stream_info(pFormatCtx)))
 	{
 		qWarning() << "av_find_stream_info" ;
-		return ;
+		return rez;
 	}
+
 
 //	dump_format(pFormatCtx, 0, "нужный файл", 0);//for debugging
 	
-	tree->clear();
-	QTreeWidgetItem* container =  new QTreeWidgetItem(QStringList(tr("Container")) << pFormatCtx->iformat->name);
-	tree->addTopLevelItem (container);
+//	tree->clear();
+//	QTreeWidgetItem* container =  new QTreeWidgetItem(QStringList(tr("Container")) << pFormatCtx->iformat->name);
+//	tree->addTopLevelItem (container);
 	for(unsigned int i=0; i<pFormatCtx->nb_streams; i++) 
 	{
-		QString num;
-		num.setNum(i);
-		QStringList fields(QString(tr("Stream ")) + num);
+//		QString num;
+//		num.setNum(i);
+//		QStringList fields(QString(tr("Stream ")) + num);
 		//("Stream") << pFormatCtx->streams[i]->codec->codec_name;
 		// AVCodecContext *pCodecCtx =  pFormatCtx->streams[i]->codec;
 		// switch (pCodecCtx->codec_type)
@@ -226,42 +211,18 @@ FileInfo::setFilename(QString filename)
 //			qWarning() << "Unsupported codec!";
 			//TODO отмечать в графике это
 //		}
-
+		
+		
 		char buf[256];
 		avcodec_string(buf, sizeof(buf), pFormatCtx->streams[i]->codec, false);//шоцетаке ?
 //		qWarning(buf);
-		fields << buf;
-		
+//		fields << buf;
 
-		QTreeWidgetItem* stream = new QTreeWidgetItem(fields );
-		container->addChild(stream);
-	}
+		rez.append(qMakePair(pFormatCtx->streams[i]->codec->codec_type, QString(buf)));
+
+//		QTreeWidgetItem* stream = new QTreeWidgetItem(fields );
+//		container->addChild(stream);
+	}	   
+	return rez;
 }
 
-// GenericChooseFormat::GenericChooseFormat (QWidget* parent)
-// 	:QWidget (parent)
-// {
-// }
-
-ChooseFileFormat::ChooseFileFormat (QWidget* parent)
-	:QWidget (parent)
-{
-	FileFormats availFormats;
-	QComboBox* combobox = new QComboBox;
-	QHBoxLayout *layout = new QHBoxLayout;
-	layout->addWidget(combobox);
-	combobox->addItems(availFormats.getAvailableEncodeFileFormats());
-	setLayout(layout);
-}
-
-QString
-ChooseFileFormat::getFormat()
-{
-	return format;
-}
-
-void
-ChooseFileFormat::setFormat(const QString text)
-{
-	format = text;
-}

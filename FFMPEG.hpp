@@ -18,6 +18,7 @@ extern "C" {
 #include <QVBoxLayout>
 #include <QTreeWidgetItem>
 #include <QComboBox>
+#include <QPair>
 
 #include <iostream>
 
@@ -73,50 +74,7 @@ private:
 	mutable QList <CodecT> allCodecs;
 };
 
-//виджет отображающий информацию о файле
-class FileInfo : 
-	public QWidget
-{
-	Q_OBJECT
-public:
-	FileInfo(QWidget* parent = 0);
-public slots:
-	void setFilename(QString);
-private:
-	QTreeWidget *tree;
-};
 
-//виджет в котором можно выбрать параметры кодеков и формата, этот класс просто чтоб от него наследовать виджеты которые реально что-то выбирают
-class GenericChooseFormat 
-{
-public:
-//	GenericChooseFormat ();
-	virtual QString getFormat() =0;
-	virtual ~GenericChooseFormat() ;
-};
-
-//виджет в котором можно выбрать тип контейнера в который конвертить
-class ChooseFileFormat :
-	public QWidget
-{
-	Q_OBJECT
-public:
-	ChooseFileFormat (QWidget* parent = 0);
-	virtual QString getFormat();//возращает выбраный формат файла (опция -f)
-	virtual ~ChooseFileFormat() {};
-private:
-	QString format;
-private slots:
-	void setFormat(const QString);
-};
-
-//виджет который содержит элементы для управления кодеком/контэйнером
-//определять виджет по его типу
-// class ChooseParameters : 
-// 	public QWidget
-// {
-// 	Q_OBJECT
-
-// }
+QList<QPair<CodecType, QString> > FileInfo(QString filename);
 
 #endif //FFMPEG_MY_H

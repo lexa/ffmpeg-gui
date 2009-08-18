@@ -12,13 +12,13 @@ int main(int argc, char *argv[])
 	MainWindow* window = new MainWindow();
 	window->show();
 
-	// FileFormats  tmp;
-	// qWarning() <<  tmp.getAvailableEncodeFileFormats();
-	// FileInfo fileInfo;
+//	FileFormats  tmp1;
+//	qWarning() <<  tmp1.getAvailableEncodeFileFormats();
+	//FileInfo fileInfo;
 
-	// fileInfo.setFilename("/home/lexa/tmp/ffmpeg/movie.avi");
+	 //fileInfo.setFilename("/home/lexa/tmp/ffmpeg/movie.avi");
 	
-	Codecs tmp;
-	qWarning() << tmp.getAvailableCodecs(CODEC_TYPE_VIDEO, ENCODE | DECODE);
+//	Codecs tmp;
+//	qWarning() << tmp.getAvailableCodecs(CODEC_TYPE_VIDEO, ENCODE);
 	return app.exec();
 }

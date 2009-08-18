@@ -89,31 +89,22 @@ SelectionInputFile::SelectionInputFile (QWidget* parent)
 
 }
 
-SelectionOutputContainer::SelectionOutputContainer(QWidget *parent)
-	:QWidget(parent)
-{
-//	qWarning() << getAvailableFormats();
-}
-
 MainWindow::MainWindow (QWidget *parent)
 	:QWidget(parent)
 {
 	inputFileName = new SelectionInputFile();
-	FileInfo *inputFile = new FileInfo;
-	SelectionOutputContainer* outputContainer = new SelectionOutputContainer;
 
+	ChooseParameters *params = new ChooseParameters;
 
-	ChooseFileFormat* tmp = new ChooseFileFormat();
+//	ChooseFileFormat* formats = new ChooseFileFormat();//TODO убрать потом
 
 	QVBoxLayout *layoutMain = new QVBoxLayout;
 	layoutMain->addWidget(inputFileName);
-	layoutMain->addWidget(inputFile);
-	layoutMain->addWidget(tmp);
-	layoutMain->addWidget(outputContainer);
-	layoutMain->addWidget(new QPushButton("111"));
+	layoutMain->addWidget(params);
+//	layoutMain->addWidget(formats);//TODO убрать потом
+	layoutMain->addWidget(new QPushButton(tr("Convert")));
 	setLayout(layoutMain);
 	
-	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), inputFile, SLOT(setFilename(QString))); 
-//	new Codecs;
+	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), params, SLOT(setFilename(QString))); 
 	setWindowTitle(tr("ffmpeg-gui"));
 }

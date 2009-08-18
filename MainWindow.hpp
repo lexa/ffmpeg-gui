@@ -16,6 +16,7 @@
 #include <QTreeWidgetItem>
 
 
+
 extern "C" {
 #include <libavformat/avformat.h>
 #include <libavformat/avformat.h>
@@ -27,7 +28,7 @@ extern "C" {
 }
 
 #include "FFMPEG.hpp"
-
+#include "CodecSelection.hpp"
 class SelectionInputFile : public QWidget
 {
 	Q_OBJECT
@@ -44,26 +45,6 @@ signals:
 	void inputFileChanged(QString);
 };
 
-// class FileInfo : public QWidget
-// {
-// 	Q_OBJECT
-// public:
-
-// 	FileInfo (QWidget *parent = 0);
-// public slots:
-// 	void updateInfo(QString) ;
-// private:
-// 	QTreeWidget* mainTree;
-// };
-
-class SelectionOutputContainer: public QWidget
-{
-	Q_OBJECT
-public:
-	SelectionOutputContainer(QWidget *parent = 0);
-private:
-	QStringList getAvailableFormats();
-};
 
 class MainWindow : public QWidget
 {

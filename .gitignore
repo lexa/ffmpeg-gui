@@ -46,3 +46,9 @@
 /main.o
 /moc_FFMPEG.cxx
 /moc_MainWindow.cxx
+/CMakeFiles/main.dir/CodecSelection.cpp.o
+/CMakeFiles/main.dir/moc_CodecSelection.cxx.o
+/ChooseParameters
+/ChooseParameters.cpp~
+/ChooseParameters.hpp~
+/moc_CodecSelection.cxx

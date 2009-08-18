@@ -111,6 +111,30 @@ main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+CodecSelection.o: CodecSelection.cpp.o
+.PHONY : CodecSelection.o
+
+# target to build an object file
+CodecSelection.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/CodecSelection.cpp.o
+.PHONY : CodecSelection.cpp.o
+
+CodecSelection.i: CodecSelection.cpp.i
+.PHONY : CodecSelection.i
+
+# target to preprocess a source file
+CodecSelection.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/CodecSelection.cpp.i
+.PHONY : CodecSelection.cpp.i
+
+CodecSelection.s: CodecSelection.cpp.s
+.PHONY : CodecSelection.s
+
+# target to generate assembly for a file
+CodecSelection.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/CodecSelection.cpp.s
+.PHONY : CodecSelection.cpp.s
+
 FFMPEG.o: FFMPEG.cpp.o
 .PHONY : FFMPEG.o
 
@@ -183,6 +207,30 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+moc_CodecSelection.o: moc_CodecSelection.cxx.o
+.PHONY : moc_CodecSelection.o
+
+# target to build an object file
+moc_CodecSelection.cxx.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_CodecSelection.cxx.o
+.PHONY : moc_CodecSelection.cxx.o
+
+moc_CodecSelection.i: moc_CodecSelection.cxx.i
+.PHONY : moc_CodecSelection.i
+
+# target to preprocess a source file
+moc_CodecSelection.cxx.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_CodecSelection.cxx.i
+.PHONY : moc_CodecSelection.cxx.i
+
+moc_CodecSelection.s: moc_CodecSelection.cxx.s
+.PHONY : moc_CodecSelection.s
+
+# target to generate assembly for a file
+moc_CodecSelection.cxx.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_CodecSelection.cxx.s
+.PHONY : moc_CodecSelection.cxx.s
+
 moc_FFMPEG.o: moc_FFMPEG.cxx.o
 .PHONY : moc_FFMPEG.o
 
@@ -240,6 +288,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... main"
 	@echo "... rebuild_cache"
+	@echo "... CodecSelection.o"
+	@echo "... CodecSelection.i"
+	@echo "... CodecSelection.s"
 	@echo "... FFMPEG.o"
 	@echo "... FFMPEG.i"
 	@echo "... FFMPEG.s"
@@ -249,6 +300,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... moc_CodecSelection.o"
+	@echo "... moc_CodecSelection.i"
+	@echo "... moc_CodecSelection.s"
 	@echo "... moc_FFMPEG.o"
 	@echo "... moc_FFMPEG.i"
 	@echo "... moc_FFMPEG.s"
