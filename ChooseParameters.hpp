@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSplitter>
+#include <QHash>
 
 #include "FFMPEG.hpp"
 
@@ -82,7 +83,7 @@ public:
 //виджет который содержит информацию о файле и элементы для управления кодеком/контэйнером 
 //1 экземпляр виджета - 1 файл 
 class ChooseParameters : 
-	public QWidget
+	public QSplitter
 {
 	Q_OBJECT
 public:
