@@ -103,6 +103,8 @@ Codecs::Codecs(QObject* parent):
 	tmp.coder = (decode ? DECODE : 0) | (encode ? ENCODE : 0);
 
 	allCodecs.append(tmp);
+//	qWarning() << p2->name ;
+
        //  printf(
        //      " %s%s%s%s%s%s %-15s %s",
        //      decode ? "D": (/*p2->decoder ? "d":*/" "),
@@ -128,7 +130,7 @@ Codecs::getAvailableCodecs(CodecType type, int coder) const
 
 	for(; c != allCodecs.end(); c++) 
 	{
-		if ((c->type == type) && (coder & c->coder))
+		if ((c->type == type) && (0 != (coder & c->coder)))
 		{
 			rez.append (c->name);
 		}

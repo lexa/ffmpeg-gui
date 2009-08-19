@@ -25,29 +25,82 @@ ChooseFileFormat::setFormat(const QString text)
 }
 
 
-ShowFileInfo::ShowFileInfo(QWidget* parent )
+//--------------------------------------------------------------------------------//
+
+ChooseCodec::ChooseCodec (CodecType type, QWidget* parent)
+	:QWidget(parent), format("copy")
+{
+	QComboBox* list = new QComboBox;
+	Codecs availCodecs ;
+	list->addItems(availCodecs.getAvailableCodecs(type, ENCODE));
+	QVBoxLayout* l = new QVBoxLayout;
+	l->addWidget(list);
+	setLayout(l);
+	QObject::connect(list, SIGNAL(activated(const QString)), this, SLOT(setFormat(const QString))); 
+}
+
+// QString 
+// ChooseCodec::getFormat()
+// {
+// 	return format;
+// }
+
+void 
+ChooseCodec::setFormat(const QString new_format)
+{
+	format=new_format;
+}
+//--------------------------------------------------------------------------------//
+
+EmptyChoose::EmptyChoose (QWidget* parent) 
+	: QWidget(parent)
+{
+	new QLabel(tr("choose cpntainer/codec in tree above"), this);
+}
+//--------------------------------------------------------------------------------//
+
+ChooseParameters::ChooseParameters(QWidget *parent)
 	:QWidget(parent)
 {
+	l = new QVBoxLayout;
 	tree = new QTreeWidget;
-	QVBoxLayout* l = new QVBoxLayout;
 	tree->setColumnCount(2);
 	tree->setHeaderLabels(QStringList("type") << "value");
 	l->addWidget(tree);
-	setLayout(l);
-}
 
-void 
-ShowFileInfo::setFilename(QString filename)
+	currentChoose = new EmptyChoose;
+
+	l->addWidget(currentChoose);
+	setLayout(l);
+
+	QObject::connect (tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(CurrentItemChanged(QTreeWidgetItem*)));
+
+}
+void
+ChooseParameters::setFilename(QString filename)
 {
-	info = FileInfo(filename);
+ 	QList<QPair<CodecType, QString> > info = FileInfo(filename);
 	
-	tree->clear();
-	
-//	QList<QPair<CodecType, QString> >::iterator i(info.begin());
 	if (info.length() == 0 ) 
 		return;
-	QTreeWidgetItem* container =  new QTreeWidgetItem(QStringList(tr("Container")) << info[0].second, 1000 );//FIXME сделать отображение типа контейнера
-		
+	tree->clear();
+
+	for(QList<QWidget *>::iterator i(codecOptions.begin()); i != codecOptions.end(); i++ )
+	{
+		l->removeWidget(*i);
+		delete (*i);
+	}
+	codecOptions.clear();
+	currentChoose = NULL;
+	
+
+	QTreeWidgetItem* container = new QTreeWidgetItem(QStringList(tr("Container")) << info[0].second, 1000 );
+
+	QWidget* item = new ChooseFileFormat;
+	l->addWidget(item);
+	item->hide();
+	codecOptions.append(item);
+	 
 	for(int i=1 ; i < info.length(); i++) 
 	{
 		QStringList fields;
@@ -63,74 +116,32 @@ ShowFileInfo::setFilename(QString filename)
 			fields << "undefined type"; break ;
 		}
 			
+		QWidget* item = new ChooseCodec (info[i].first);
+		l->addWidget(item);
+		item->hide();
+
 		fields << info[i].second;
 			
 		container->addChild(new QTreeWidgetItem(fields, 1000+i));
+		
+		codecOptions.append(item);
 	}
+
 	tree->addTopLevelItem (container);
-	QObject::connect (tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(emitCurrentItemChanged(QTreeWidgetItem*)));
 }
 
+
 void 
-ShowFileInfo::emitCurrentItemChanged(QTreeWidgetItem* current)
+ChooseParameters::CurrentItemChanged(QTreeWidgetItem* current)
 {
+	if (current == NULL)
+		return ;
+
+	if (NULL != currentChoose)
+		currentChoose->hide();
+
 	int id = (current->type()) - 1000;
-	qWarning() << id ;
-	emit currentItemChanged(info[id].first, id-1);
-}
-
-ChooseCodec::ChooseCodec (CodecType type, QWidget* parent)
-	:QWidget(parent), format("copy")
-{
-	QComboBox* list = new QComboBox;
-	Codecs availCodecs ;
-	list->addItems(availCodecs.getAvailableCodecs(type, ENCODE));
-	QVBoxLayout* l = new QVBoxLayout;
-	l->addWidget(list);
-	setLayout(l);
-	QObject::connect(list, SIGNAL(activated(const QString)), this, SLOT(setFormat(const QString))); 
-}
-
-QString 
-ChooseCodec::getFormat()
-{
-	return format;
-}
-
-void 
-ChooseCodec::setFormat(const QString new_format)
-{
-	format=new_format;
-}
-
-EmptyChoose::EmptyChoose (QWidget* parent) 
-	: QWidget(parent)
-{
-	new QLabel(tr("choose cpntainer/codec in tree above"), this);
-}
-
-ChooseParameters::ChooseParameters(QWidget *parent)
-	:QWidget(parent)
-{
-	l = new QVBoxLayout;
-	info = new ShowFileInfo;
-	l->addWidget(info);
-	currentChoose = new EmptyChoose;
-	l->addWidget(currentChoose);
-	setLayout(l);
-	QObject::connect(info, SIGNAL(currentItemChanged(CodecType, int)), this, SLOT(changeCodecSelector(CodecType, int)));
-
-}
-void
-ChooseParameters::setFilename(QString filename)
-{
-	info->setFilename(filename);//это нормально? это по идее слот TODO подумать: может переделать его в метод а не в слот???
-	//TODO прятать инфу о кодеке
-}
-
-void
-ChooseParameters::changeCodecSelector (CodecType type, int id)
-{
-	currentChoose = new EmptyChoose;
-	
+	qWarning() << "id =" << id;
+	currentChoose = codecOptions[id];
+	currentChoose->show();
 }

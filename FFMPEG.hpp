@@ -19,8 +19,9 @@ extern "C" {
 #include <QTreeWidgetItem>
 #include <QComboBox>
 #include <QPair>
+#include <QtDebug>
 
-#include <iostream>
+//#include <iostream>
 
 
 //TODO класс singleton который будет держать ffmpeg проинициализированным

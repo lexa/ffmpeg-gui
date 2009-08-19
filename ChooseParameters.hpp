@@ -11,23 +11,23 @@
 #include "FFMPEG.hpp"
 
 //возвражать тип кодека и номер дорожки
-class ShowFileInfo : 
-	public QWidget
-{
-	Q_OBJECT
-public:
-	ShowFileInfo(QWidget* parent = 0);
-private slots:
-	void emitCurrentItemChanged(QTreeWidgetItem* current);
-public slots:
-	void setFilename(QString);
-private:
-	QTreeWidget *tree;
-	QList<QPair<CodecType, QString> > info;
+// class ShowFileInfo : 
+// 	public QWidget
+// {
+// 	Q_OBJECT
+// public:
+// 	ShowFileInfo(QWidget* parent = 0);
+// private slots:
+// 	void emitCurrentItemChanged(QTreeWidgetItem* current);
+// public slots:
+// 	void setFilename(QString);
+// private:
+// 	QTreeWidget *tree;
+// 	QList<QPair<CodecType, QString> > info;
 
-signals:
-	void currentItemChanged(CodecType type, int id);//испускается когда меняться выбор в списке кодеков
-};
+// signals:
+// 	void currentItemChanged(CodecType type, int id);//испускается когда меняться выбор в списке кодеков
+// };
 
 //TODO сделать нормальные деревья и всё на них переписать
 //виджет в котором можно выбрать параметры кодеков и формата, этот класс просто чтоб от него наследовать виджеты которые реально что-то выбирают
@@ -60,7 +60,7 @@ class ChooseCodec :
 	Q_OBJECT
 public:
 	ChooseCodec (CodecType codec, QWidget* parent = 0);
-	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
+//	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
 	virtual ~ChooseCodec() {};
 private:
 	QString format;
@@ -90,11 +90,14 @@ public:
 public slots:
 	void setFilename(QString filename);
 private slots:
-	void changeCodecSelector (CodecType, int id);
+	void CurrentItemChanged (QTreeWidgetItem* current);
 private:
-	ShowFileInfo* info;
+ 	QTreeWidget *tree;
+//	ShowFileInfo* info;
 	QVBoxLayout* l;
 	QWidget* currentChoose;
+	QList <QWidget *> codecOptions; 
+	
 };
 
 #endif //CHOOSE_PARAMETERS_H_
