@@ -92,16 +92,16 @@ SelectionInputFile::SelectionInputFile (QWidget* parent)
 MainWindow::MainWindow (QWidget *parent)
 	:QWidget(parent)
 {
-	inputFileName = new SelectionInputFile();
+//	inputFileName = new SelectionInputFile();
 
-	ChooseParameters *params = new ChooseParameters;
+	ChooseParameters *params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
 
 	QVBoxLayout *layoutMain = new QVBoxLayout;
-	layoutMain->addWidget(inputFileName);
+//	layoutMain->addWidget(inputFileName);
 	layoutMain->addWidget(params);
 	layoutMain->addWidget(new QPushButton(tr("Convert")));
 	setLayout(layoutMain);
-	
-	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), params, SLOT(setFilename(QString))); 
+
+//	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), params, SLOT(setFilename(QString))); 
 	setWindowTitle(tr("ffmpeg-gui"));
 }

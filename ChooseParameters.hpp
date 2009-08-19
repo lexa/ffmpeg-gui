@@ -6,28 +6,9 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QLabel>
-
+#include <QSplitter>
 
 #include "FFMPEG.hpp"
-
-//возвражать тип кодека и номер дорожки
-// class ShowFileInfo : 
-// 	public QWidget
-// {
-// 	Q_OBJECT
-// public:
-// 	ShowFileInfo(QWidget* parent = 0);
-// private slots:
-// 	void emitCurrentItemChanged(QTreeWidgetItem* current);
-// public slots:
-// 	void setFilename(QString);
-// private:
-// 	QTreeWidget *tree;
-// 	QList<QPair<CodecType, QString> > info;
-
-// signals:
-// 	void currentItemChanged(CodecType type, int id);//испускается когда меняться выбор в списке кодеков
-// };
 
 //TODO сделать нормальные деревья и всё на них переписать
 //виджет в котором можно выбрать параметры кодеков и формата, этот класс просто чтоб от него наследовать виджеты которые реально что-то выбирают
@@ -47,21 +28,41 @@ public:
 	ChooseFileFormat (QWidget* parent = 0);
 	QString getFormat();//возращает выбраный формат файла (опция -f)
 //	~ChooseFileFormat() {};
+signals:
+	void parametersChanged(int, QString);
 private:
 	QString format;
 private slots:
 	void setFormat(const QString);
 };
 
-//виджет для выбора кодерка в который конвертить
-class ChooseCodec :
+//виджет для выбора видео кодерка в который конвертить
+class ChooseVideoCodec :
 	public QWidget
 {
 	Q_OBJECT
 public:
-	ChooseCodec (CodecType codec, QWidget* parent = 0);
+	ChooseVideoCodec (QWidget* parent = 0);
 //	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
-	virtual ~ChooseCodec() {};
+	virtual ~ChooseVideoCodec() {};
+signals:
+	void parametersChanged(int, QString);
+private:
+	QString format;
+private slots:
+	void setFormat(const QString);
+};
+
+class ChooseAudioCodec :
+	public QWidget
+{
+	Q_OBJECT
+public:
+	ChooseAudioCodec (QWidget* parent = 0);
+//	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
+	virtual ~ChooseAudioCodec() {};
+signals:
+	void parametersChanged(int, QString);
 private:
 	QString format;
 private slots:
@@ -79,25 +80,25 @@ public:
 
 
 //виджет который содержит информацию о файле и элементы для управления кодеком/контэйнером 
+//1 экземпляр виджета - 1 файл 
 class ChooseParameters : 
 	public QWidget
 {
 	Q_OBJECT
 public:
-	ChooseParameters(QWidget *parent = 0);
+	ChooseParameters(QString filename, QWidget *parent = 0);
 signals:
 	void parametersChanged (QString);//испускается когда строка для кодирования меняется
 
-public slots:
-	void setFilename(QString filename);
+	// public slots:
+	// 	 void setFilename(QString filename);
 private slots:
-	void currentItemChanged (QTreeWidgetItem* current);//когда элемент из дерева выбирается
-//	void codecParametersChanged(QString);
+//	void currentItemChanged (QTreeWidgetItem* current);//когда элемент из дерева выбирается
+	void codecParametersChanged(int, QString);//собственно очерёдность потока и его параметры 
 private:
  	QTreeWidget *tree;
-	QVBoxLayout* l;
-	QWidget* currentChoose;
-	QList <QWidget *> codecOptions;
+	QSplitter* l;
+	QList<QString> listParameters;
 };
 
 #endif //CHOOSE_PARAMETERS_H_
