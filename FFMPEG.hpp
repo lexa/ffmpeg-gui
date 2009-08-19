@@ -57,7 +57,7 @@ private:
 };
 
 enum Appointment {DECODE=1, ENCODE=2};
-class Codecs : public QObject
+class Codecs : public QObject//TODO подумать: может переделать на ф-ии ??
 {
 	Q_OBJECT
 	
@@ -75,6 +75,6 @@ private:
 };
 
 
-QList<QPair<CodecType, QString> > FileInfo(QString filename);
+QList<QPair<CodecType, QString> > FileInfo(QString filename);//Первый элемент в списке
 
 #endif //FFMPEG_MY_H

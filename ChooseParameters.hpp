@@ -1,50 +1,82 @@
-#ifndef CODEC_SELECTION_H_
-#define CODEC_SELECTION_H_
+#ifndef CHOOSE_PARAMETERS_H_
+#define CHOOSE_PARAMETERS_H_
 
 #include <QString>
 #include <QWidget>
 #include <QTreeWidget>
 #include <QVBoxLayout>
+#include <QLabel>
 
 
 #include "FFMPEG.hpp"
 
-
+//возвражать тип кодека и номер дорожки
 class ShowFileInfo : 
 	public QWidget
 {
 	Q_OBJECT
 public:
 	ShowFileInfo(QWidget* parent = 0);
+private slots:
+	void emitCurrentItemChanged(QTreeWidgetItem* current);
 public slots:
 	void setFilename(QString);
 private:
 	QTreeWidget *tree;
+	QList<QPair<CodecType, QString> > info;
+
+signals:
+	void currentItemChanged(CodecType type, int id);//испускается когда меняться выбор в списке кодеков
 };
 
 //TODO сделать нормальные деревья и всё на них переписать
 //виджет в котором можно выбрать параметры кодеков и формата, этот класс просто чтоб от него наследовать виджеты которые реально что-то выбирают
-class GenericChooseFormat 
-{
-public:
-	virtual QString getFormat() =0;
-	virtual ~GenericChooseFormat() {};
-};
+// class GenericChooseFormat : public QWidget
+// {
+// public:
+// 	virtual QString getFormat() =0;
+// 	virtual ~GenericChooseFormat() {};
+// };
 
 //виджет в котором можно выбрать тип контейнера в который конвертить
 class ChooseFileFormat :
-	public QWidget, public GenericChooseFormat
+	public QWidget
 {
 	Q_OBJECT
 public:
 	ChooseFileFormat (QWidget* parent = 0);
-	virtual QString getFormat();//возращает выбраный формат файла (опция -f)
-	virtual ~ChooseFileFormat() {};
+	QString getFormat();//возращает выбраный формат файла (опция -f)
+//	~ChooseFileFormat() {};
 private:
 	QString format;
 private slots:
 	void setFormat(const QString);
 };
+
+//виджет для выбора кодерка в который конвертить
+class ChooseCodec :
+	public QWidget
+{
+	Q_OBJECT
+public:
+	ChooseCodec (CodecType codec, QWidget* parent = 0);
+	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
+	virtual ~ChooseCodec() {};
+private:
+	QString format;
+private slots:
+	void setFormat(const QString);
+};
+
+class EmptyChoose : public QWidget
+{
+	Q_OBJECT
+public:
+	EmptyChoose(QWidget* parent=0);
+	virtual QString getFormat() {return QString("");};
+	virtual ~EmptyChoose() {};
+};
+
 
 //виджет который содержит элементы для управления кодеком/контэйнером
 //определять виджет по его типу
@@ -55,8 +87,14 @@ class ChooseParameters :
 public:
 	ChooseParameters(QWidget *parent = 0);
 	QString getSelectedParameters ();//аозвращает строку для ffmpeg для конвертирования 
+public slots:
+	void setFilename(QString filename);
+private slots:
+	void changeCodecSelector (CodecType, int id);
 private:
-	
-}
+	ShowFileInfo* info;
+	QVBoxLayout* l;
+	QWidget* currentChoose;
+};
 
-#endif //CODEC_SELECTION_H_
+#endif //CHOOSE_PARAMETERS_H_

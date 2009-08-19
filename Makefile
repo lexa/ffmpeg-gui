@@ -111,29 +111,29 @@ main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
-CodecSelection.o: CodecSelection.cpp.o
-.PHONY : CodecSelection.o
+ChooseParameters.o: ChooseParameters.cpp.o
+.PHONY : ChooseParameters.o
 
 # target to build an object file
-CodecSelection.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/CodecSelection.cpp.o
-.PHONY : CodecSelection.cpp.o
+ChooseParameters.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/ChooseParameters.cpp.o
+.PHONY : ChooseParameters.cpp.o
 
-CodecSelection.i: CodecSelection.cpp.i
-.PHONY : CodecSelection.i
+ChooseParameters.i: ChooseParameters.cpp.i
+.PHONY : ChooseParameters.i
 
 # target to preprocess a source file
-CodecSelection.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/CodecSelection.cpp.i
-.PHONY : CodecSelection.cpp.i
+ChooseParameters.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/ChooseParameters.cpp.i
+.PHONY : ChooseParameters.cpp.i
 
-CodecSelection.s: CodecSelection.cpp.s
-.PHONY : CodecSelection.s
+ChooseParameters.s: ChooseParameters.cpp.s
+.PHONY : ChooseParameters.s
 
 # target to generate assembly for a file
-CodecSelection.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/CodecSelection.cpp.s
-.PHONY : CodecSelection.cpp.s
+ChooseParameters.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/ChooseParameters.cpp.s
+.PHONY : ChooseParameters.cpp.s
 
 FFMPEG.o: FFMPEG.cpp.o
 .PHONY : FFMPEG.o
@@ -207,29 +207,29 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-moc_CodecSelection.o: moc_CodecSelection.cxx.o
-.PHONY : moc_CodecSelection.o
+moc_ChooseParameters.o: moc_ChooseParameters.cxx.o
+.PHONY : moc_ChooseParameters.o
 
 # target to build an object file
-moc_CodecSelection.cxx.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_CodecSelection.cxx.o
-.PHONY : moc_CodecSelection.cxx.o
+moc_ChooseParameters.cxx.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_ChooseParameters.cxx.o
+.PHONY : moc_ChooseParameters.cxx.o
 
-moc_CodecSelection.i: moc_CodecSelection.cxx.i
-.PHONY : moc_CodecSelection.i
+moc_ChooseParameters.i: moc_ChooseParameters.cxx.i
+.PHONY : moc_ChooseParameters.i
 
 # target to preprocess a source file
-moc_CodecSelection.cxx.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_CodecSelection.cxx.i
-.PHONY : moc_CodecSelection.cxx.i
+moc_ChooseParameters.cxx.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_ChooseParameters.cxx.i
+.PHONY : moc_ChooseParameters.cxx.i
 
-moc_CodecSelection.s: moc_CodecSelection.cxx.s
-.PHONY : moc_CodecSelection.s
+moc_ChooseParameters.s: moc_ChooseParameters.cxx.s
+.PHONY : moc_ChooseParameters.s
 
 # target to generate assembly for a file
-moc_CodecSelection.cxx.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_CodecSelection.cxx.s
-.PHONY : moc_CodecSelection.cxx.s
+moc_ChooseParameters.cxx.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/moc_ChooseParameters.cxx.s
+.PHONY : moc_ChooseParameters.cxx.s
 
 moc_FFMPEG.o: moc_FFMPEG.cxx.o
 .PHONY : moc_FFMPEG.o
@@ -288,9 +288,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... main"
 	@echo "... rebuild_cache"
-	@echo "... CodecSelection.o"
-	@echo "... CodecSelection.i"
-	@echo "... CodecSelection.s"
+	@echo "... ChooseParameters.o"
+	@echo "... ChooseParameters.i"
+	@echo "... ChooseParameters.s"
 	@echo "... FFMPEG.o"
 	@echo "... FFMPEG.i"
 	@echo "... FFMPEG.s"
@@ -300,9 +300,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... moc_CodecSelection.o"
-	@echo "... moc_CodecSelection.i"
-	@echo "... moc_CodecSelection.s"
+	@echo "... moc_ChooseParameters.o"
+	@echo "... moc_ChooseParameters.i"
+	@echo "... moc_ChooseParameters.s"
 	@echo "... moc_FFMPEG.o"
 	@echo "... moc_FFMPEG.i"
 	@echo "... moc_FFMPEG.s"

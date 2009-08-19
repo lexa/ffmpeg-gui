@@ -96,12 +96,9 @@ MainWindow::MainWindow (QWidget *parent)
 
 	ChooseParameters *params = new ChooseParameters;
 
-//	ChooseFileFormat* formats = new ChooseFileFormat();//TODO убрать потом
-
 	QVBoxLayout *layoutMain = new QVBoxLayout;
 	layoutMain->addWidget(inputFileName);
 	layoutMain->addWidget(params);
-//	layoutMain->addWidget(formats);//TODO убрать потом
 	layoutMain->addWidget(new QPushButton(tr("Convert")));
 	setLayout(layoutMain);
 	

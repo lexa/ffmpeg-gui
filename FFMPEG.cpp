@@ -182,6 +182,7 @@ FileInfo(QString filename)
 		return rez;
 	}
 
+	rez.append(qMakePair(CODEC_TYPE_UNKNOWN, QString(pFormatCtx->iformat->name)));//контеёнер, ну вот такой хак пришлось ваять, TODO потом переписать когда будет работа со многими файлами
 
 //	dump_format(pFormatCtx, 0, "нужный файл", 0);//for debugging
 	

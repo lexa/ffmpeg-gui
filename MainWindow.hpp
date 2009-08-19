@@ -1,3 +1,6 @@
+#ifndef MAIN_WINDOW_H_
+#define MAIN_WINDOW_H_
+
 #include <QApplication>
 #include <QPushButton>
 #include <QComboBox>
@@ -28,7 +31,8 @@ extern "C" {
 }
 
 #include "FFMPEG.hpp"
-#include "CodecSelection.hpp"
+#include "ChooseParameters.hpp"
+
 class SelectionInputFile : public QWidget
 {
 	Q_OBJECT
@@ -58,3 +62,5 @@ private:
 	SelectionInputFile* inputFileName;
 
 };
+
+#endif //MAIN_WINDOW_H_
