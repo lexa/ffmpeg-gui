@@ -73,7 +73,7 @@ ChooseParameters::ChooseParameters(QWidget *parent)
 	l->addWidget(currentChoose);
 	setLayout(l);
 
-	QObject::connect (tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(CurrentItemChanged(QTreeWidgetItem*)));
+	QObject::connect (tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(currentItemChanged(QTreeWidgetItem*)));
 
 }
 void
@@ -97,8 +97,11 @@ ChooseParameters::setFilename(QString filename)
 	QTreeWidgetItem* container = new QTreeWidgetItem(QStringList(tr("Container")) << info[0].second, 1000 );
 
 	QWidget* item = new ChooseFileFormat;
-	l->addWidget(item);
 	item->hide();
+	l->addWidget(item);
+
+//	codecParametersChanged
+
 	codecOptions.append(item);
 	 
 	for(int i=1 ; i < info.length(); i++) 
@@ -117,8 +120,8 @@ ChooseParameters::setFilename(QString filename)
 		}
 			
 		QWidget* item = new ChooseCodec (info[i].first);
-		l->addWidget(item);
 		item->hide();
+		l->addWidget(item);
 
 		fields << info[i].second;
 			
@@ -132,7 +135,7 @@ ChooseParameters::setFilename(QString filename)
 
 
 void 
-ChooseParameters::CurrentItemChanged(QTreeWidgetItem* current)
+ChooseParameters::currentItemChanged(QTreeWidgetItem* current)
 {
 	if (current == NULL)
 		return ;

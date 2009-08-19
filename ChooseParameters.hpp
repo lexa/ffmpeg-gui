@@ -92,7 +92,7 @@ public slots:
 	void setFilename(QString filename);
 private slots:
 	void currentItemChanged (QTreeWidgetItem* current);//когда элемент из дерева выбирается
-	void codecParametersChanged(QString);
+//	void codecParametersChanged(QString);
 private:
  	QTreeWidget *tree;
 	QVBoxLayout* l;
