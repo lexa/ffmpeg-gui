@@ -81,8 +81,6 @@ ChooseParameters::setFilename(QString filename)
 {
  	QList<QPair<CodecType, QString> > info = FileInfo(filename);
 	
-	if (info.length() == 0 ) 
-		return;
 	tree->clear();
 
 	for(QList<QWidget *>::iterator i(codecOptions.begin()); i != codecOptions.end(); i++ )
@@ -93,6 +91,8 @@ ChooseParameters::setFilename(QString filename)
 	codecOptions.clear();
 	currentChoose = NULL;
 	
+	if (info.length() == 0)
+		return;
 
 	QTreeWidgetItem* container = new QTreeWidgetItem(QStringList(tr("Container")) << info[0].second, 1000 );
 
@@ -141,7 +141,6 @@ ChooseParameters::CurrentItemChanged(QTreeWidgetItem* current)
 		currentChoose->hide();
 
 	int id = (current->type()) - 1000;
-	qWarning() << "id =" << id;
 	currentChoose = codecOptions[id];
 	currentChoose->show();
 }

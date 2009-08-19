@@ -78,26 +78,26 @@ public:
 };
 
 
-//виджет который содержит элементы для управления кодеком/контэйнером
-//определять виджет по его типу
+//виджет который содержит информацию о файле и элементы для управления кодеком/контэйнером 
 class ChooseParameters : 
 	public QWidget
 {
 	Q_OBJECT
 public:
 	ChooseParameters(QWidget *parent = 0);
-	QString getSelectedParameters ();//аозвращает строку для ffmpeg для конвертирования 
+signals:
+	void parametersChanged (QString);//испускается когда строка для кодирования меняется
+
 public slots:
 	void setFilename(QString filename);
 private slots:
-	void CurrentItemChanged (QTreeWidgetItem* current);
+	void currentItemChanged (QTreeWidgetItem* current);//когда элемент из дерева выбирается
+	void codecParametersChanged(QString);
 private:
  	QTreeWidget *tree;
-//	ShowFileInfo* info;
 	QVBoxLayout* l;
 	QWidget* currentChoose;
-	QList <QWidget *> codecOptions; 
-	
+	QList <QWidget *> codecOptions;
 };
 
 #endif //CHOOSE_PARAMETERS_H_
