@@ -66,8 +66,6 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 
 	tree->addTopLevelItem (container);
 	container->setExpanded(true);//The QTreeWidgetItem must be added to the QTreeWidget before calling this function.
-
-
 }
 
 void 

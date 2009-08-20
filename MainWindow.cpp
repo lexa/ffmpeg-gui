@@ -30,7 +30,8 @@ MainWindow::MainWindow (QWidget *parent)
 	QObject::connect(inputFile, SIGNAL(fileChanged(QString)), this, SLOT(inputFileChanged(QString)));
 //	QObject::connect(outputFile, SIGNAL(fileChanged(QString)), this, SLOT(outputFileChanged(QString)));
 
-	params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
+//	params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
+	params = new ChooseParameters("");
 
 	layoutMain = new QVBoxLayout;
 
