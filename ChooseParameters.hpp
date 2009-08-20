@@ -70,7 +70,7 @@ private slots:
 	void setFormat(const QString);
 };
 
-class EmptyChoose : public QWidget
+class EmptyChoose : public QLabel
 {
 	Q_OBJECT
 public:

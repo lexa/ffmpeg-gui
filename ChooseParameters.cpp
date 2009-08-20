@@ -91,9 +91,8 @@ ChooseAudioCodec::setFormat(const QString new_format)
 //--------------------------------------------------------------------------------//
 
 EmptyChoose::EmptyChoose (QWidget* parent) 
-	: QWidget(parent)
+	: QLabel(tr("choose container/codec in tree"), parent)
 {
-//	new QLabel(tr("choose cpntainer/codec in tree above"), this);
 }
 //--------------------------------------------------------------------------------//
 
@@ -108,6 +107,8 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 	addWidget(selectors);
 
  	QList<QPair<CodecType, QString> > info = FileInfo(filename);
+	if (info.length() == 0)
+		return;
 	QTreeWidgetItem* container = new QTreeWidgetItem(QStringList(tr("Container")) << info[0].second);
 
 	selectors->addTab(new ChooseFileFormat, tr("Container"));
@@ -142,7 +143,6 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 		fields << info[i].second;
 			
 		container->addChild(new QTreeWidgetItem(fields));
-		
 	}
 
 	tree->addTopLevelItem (container);

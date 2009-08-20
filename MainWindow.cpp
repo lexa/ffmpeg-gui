@@ -3,58 +3,11 @@
 #include <iostream>
 
 
-
-// FileInfo::FileInfo (QWidget *parent)
-// 	:QWidget(parent)
-// {
-// 	mainTree = new QTreeWidget();
-// 	mainTree->clear();
-// 	mainTree->setHeaderLabels(QStringList(tr("streams")));
-// 	QVBoxLayout* layout =new QVBoxLayout();
-// 	layout->addWidget(mainTree);
-// 	setLayout(layout);
-// }
-
-// void
-// FileInfo::updateInfo(QString filename)
-// {
-// //	qWarning() << "updateInfo";
-// 	AVFormatContext *pFormatCtx=NULL;
-// 	int err;
-// 	avcodec_register_all();
-// 	avdevice_register_all();
-// 	av_register_all();
-// 	//хз почему но именно так работет FIXME проверку на ощибку
-
-// 	if (0 != (err = av_open_input_file(&pFormatCtx, filename.toStdString().c_str(), NULL, 0, NULL)))
-// 	{
-// 		qWarning() << "av_open_input_file" << err;
-// 		return ;
-// 	}
-// 	if (0 > (err = av_find_stream_info(pFormatCtx)))
-// 	{
-// 		qWarning() << "av_find_stream_info" << err;
-// 		av_close_input_file(pFormatCtx);
-// 		return;
-// 	}
-
-// //	dump_format(pFormatCtx, 0, filename.toStdString().c_str(), false);
-// 	mainTree->clear();
-	
-// 	for(int i=0; i<pFormatCtx->nb_streams; i++) {
-// 		char buf[256];
-// 		avcodec_string(buf, sizeof(buf), pFormatCtx->streams[i]->codec, false);
-// 		mainTree->addTopLevelItem(new QTreeWidgetItem(QStringList(buf)));
-// 	}
-// }
-
-
-
 void
-SelectionInputFile::showChooseInputFileDialog()
+SelectionFile::showFileDialog()
 {
 //	std::cerr << "file dialog" << std::endl;
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"));
+	QString filename = QFileDialog::getOpenFileName(this, label);
 //	qWarning() << filename ;
 
 	inputFilename->setText(filename);
@@ -63,43 +16,69 @@ SelectionInputFile::showChooseInputFileDialog()
 
 
 void 
-SelectionInputFile::emitInputFileChanged ()
+SelectionFile::emitFileChanged ()
 {
-	emit inputFileChanged(inputFilename->text());
+	emit fileChanged(inputFilename->text());
 }
 
-SelectionInputFile::SelectionInputFile (QWidget* parent)
+SelectionFile::SelectionFile (QString label, QWidget* parent)
 	:QWidget(parent)
 {
-	QLabel *inputLabel = new QLabel(tr("Input File:"));
+	QLabel *inputLabel = new QLabel(label);
+	this->label = label;
 	
-	inputFilename = new QLineEdit("/home/lexa/tmp/ffmpeg/movie.avi");
-	QPushButton* selectInputFile = new QPushButton(tr("Select File"));
+	inputFilename = new QLineEdit;
+	QPushButton* selectFile = new QPushButton(tr("Select File"));
 
-	QHBoxLayout *layoutInputFile = new QHBoxLayout;
-	layoutInputFile->addWidget (inputLabel);
-	layoutInputFile->addWidget (inputFilename );
-	layoutInputFile->addWidget (selectInputFile);
+	QHBoxLayout *layoutFile = new QHBoxLayout;
+	layoutFile->addWidget (inputLabel);
+	layoutFile->addWidget (inputFilename);
+	layoutFile->addWidget (selectFile);
 
-	QObject::connect (selectInputFile, SIGNAL(clicked()), this, SLOT(showChooseInputFileDialog()) );//переипсать  на немодальные окна
-	QObject::connect (inputFilename, SIGNAL(textChanged(QString)), this, SLOT(emitInputFileChanged()) );
+	QObject::connect (selectFile, SIGNAL(clicked()), this, SLOT(showFileDialog()));
+	QObject::connect (inputFilename, SIGNAL(textChanged(QString)), this, SLOT(emitFileChanged()) );
 	QVBoxLayout *layoutMain = new QVBoxLayout;
-	layoutMain->addLayout(layoutInputFile);
+	layoutMain->addLayout(layoutFile);
 	setLayout(layoutMain);
 
 }
 
+void 
+MainWindow::inputFileChanged(QString filename)
+{	
+	qWarning() << "inputFileChanged";
+	layoutMain->removeWidget(params);
+	delete (params);
+	params = new ChooseParameters(filename);
+	layoutMain->insertWidget(1, params, 1);
+//	layoutMain->setStretch(1, 1);
+	
+}
+
+
+
 MainWindow::MainWindow (QWidget *parent)
 	:QWidget(parent)
 {
-//	inputFileName = new SelectionInputFile();
+	SelectionFile* inputFile = new SelectionFile(tr("Input File:"));
+//	SelectionFile* outputFile = new SelectionFile(tr("Output File:"));
+	QHBoxLayout* top_line = new QHBoxLayout;
+	top_line->addWidget(inputFile);
+//	top_line->addWidget(outputFile);
+	top_line->addStretch(0);
 
-	ChooseParameters *params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
+	QObject::connect(inputFile, SIGNAL(fileChanged(QString)), this, SLOT(inputFileChanged(QString)));
+//	QObject::connect(outputFile, SIGNAL(fileChanged(QString)), this, SLOT(outputFileChanged(QString)));
 
-	QVBoxLayout *layoutMain = new QVBoxLayout;
-//	layoutMain->addWidget(inputFileName);
-	layoutMain->addWidget(params);
+	params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
+
+	layoutMain = new QVBoxLayout;
+
+	layoutMain->addLayout(top_line);
+	layoutMain->addWidget(params);//FIXME убрать ???
 	layoutMain->addWidget(new QPushButton(tr("Convert")));
+	layoutMain->setStretch(1, 1);
+
 	setLayout(layoutMain);
 
 //	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), params, SLOT(setFilename(QString))); 

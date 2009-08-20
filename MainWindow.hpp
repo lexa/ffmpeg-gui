@@ -33,24 +33,25 @@ extern "C" {
 #include "FFMPEG.hpp"
 #include "ChooseParameters.hpp"
 
-class SelectionInputFile : public QWidget
+class SelectionFile 
+	: public QWidget
 {
 	Q_OBJECT
-	
 public:
- 	SelectionInputFile (QWidget *parent = 0);
-					 
+ 	SelectionFile (QString label, QWidget* parent = 0);
 private slots:
-	void showChooseInputFileDialog();
-	void emitInputFileChanged ();
+	void showFileDialog();
+	void emitFileChanged ();
 private:
 	QLineEdit* inputFilename;
+	QString label;
 signals:
-	void inputFileChanged(QString);
+	void fileChanged(QString);
 };
 
 
-class MainWindow : public QWidget
+class MainWindow 
+	: public QWidget
 {
 	Q_OBJECT
 	
@@ -59,8 +60,13 @@ public:
 	virtual ~MainWindow () {};
 
 private:
-	SelectionInputFile* inputFileName;
-
+//	SelectionFile* inputFile;
+//	SelectionFile* outputFile;
+	QVBoxLayout *layoutMain;
+	ChooseParameters *params;
+private slots:
+	void inputFileChanged(QString filename);
+//	void outputFileChanged(QString filename);
 };
 
 #endif //MAIN_WINDOW_H_
