@@ -21,14 +21,14 @@ LibAVC::~LibAVC()
 }
 
 
-
-FileFormats::FileFormats(QObject *parent)
-	:QObject(parent)
+QStringList
+FileFormats(bool need_decode, bool need_encode)
 {
 	AVInputFormat *ifmt=NULL;
 	AVOutputFormat *ofmt=NULL;
 	const char *last_name;
 	
+	QStringList availFileFormats;
 	LibAVC::instance();//убедились что всё наместе
 	
 	last_name= "000";
@@ -60,11 +60,12 @@ FileFormats::FileFormats(QObject *parent)
 			break;
 		last_name= name;
 
-		if (decode)
-			decodeFileFormats.append(name);
-		if (encode)
-			encodeFileFormats.append(name);
+		if (need_decode && decode)
+			availFileFormats.append(name);
+		if (need_encode && encode)
+			availFileFormats.append(name);
 	}
+	return availFileFormats;
 }
 
 Codecs::Codecs(QObject* parent):
@@ -103,21 +104,6 @@ Codecs::Codecs(QObject* parent):
 	tmp.coder = (decode ? DECODE : 0) | (encode ? ENCODE : 0);
 
 	allCodecs.append(tmp);
-//	qWarning() << p2->name ;
-
-       //  printf(
-       //      " %s%s%s%s%s%s %-15s %s",
-       //      decode ? "D": (/*p2->decoder ? "d":*/" "),
-       //      encode ? "E":" ",
-       //      type_str,
-       //      cap & CODEC_CAP_DRAW_HORIZ_BAND ? "S":" ",
-       //      cap & CODEC_CAP_DR1 ? "D":" ",
-       //      cap & CODEC_CAP_TRUNCATED ? "T":" ",
-       //      p2->name,
-       //      p2->long_name ? p2->long_name : "");
-       // /* if(p2->decoder && decode==0)
-       //      printf(" use %s for decoding", p2->decoder->name);*/
-       //  printf("\n");
 	
     }
 }
@@ -139,15 +125,15 @@ Codecs::getAvailableCodecs(CodecType type, int coder) const
 }
 
 QStringList
-FileFormats::getAvailableDecodeFileFormats() const
+getAvailableDecodeFileFormats()
 {
-	return decodeFileFormats;
+	return FileFormats(0, 1);
 }
 
 QStringList
-FileFormats::getAvailableEncodeFileFormats() const
+getAvailableEncodeFileFormats()
 {
-	return encodeFileFormats;
+	return FileFormats(1, 0);
 }
 
 

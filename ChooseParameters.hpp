@@ -11,6 +11,11 @@
 
 #include "FFMPEG.hpp"
 
+#include "ChooseAudioCodec.hpp"
+#include "ChooseFileFormat.hpp"
+#include "ChooseVideoCodec.hpp"
+
+
 //TODO сделать нормальные деревья и всё на них переписать
 //виджет в котором можно выбрать параметры кодеков и формата, этот класс просто чтоб от него наследовать виджеты которые реально что-то выбирают
 // class GenericChooseFormat : public QWidget
@@ -20,55 +25,7 @@
 // 	virtual ~GenericChooseFormat() {};
 // };
 
-//виджет в котором можно выбрать тип контейнера в который конвертить
-class ChooseFileFormat :
-	public QWidget
-{
-	Q_OBJECT
-public:
-	ChooseFileFormat (QWidget* parent = 0);
-	QString getFormat();//возращает выбраный формат файла (опция -f)
-//	~ChooseFileFormat() {};
-signals:
-	void parametersChanged(int, QString);
-private:
-	QString format;
-private slots:
-	void setFormat(const QString);
-};
 
-//виджет для выбора видео кодерка в который конвертить
-class ChooseVideoCodec :
-	public QWidget
-{
-	Q_OBJECT
-public:
-	ChooseVideoCodec (QWidget* parent = 0);
-//	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
-	virtual ~ChooseVideoCodec() {};
-signals:
-	void parametersChanged(int, QString);
-private:
-	QString format;
-private slots:
-	void setFormat(const QString);
-};
-
-class ChooseAudioCodec :
-	public QWidget
-{
-	Q_OBJECT
-public:
-	ChooseAudioCodec (QWidget* parent = 0);
-//	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
-	virtual ~ChooseAudioCodec() {};
-signals:
-	void parametersChanged(int, QString);
-private:
-	QString format;
-private slots:
-	void setFormat(const QString);
-};
 
 class EmptyChoose : public QLabel
 {

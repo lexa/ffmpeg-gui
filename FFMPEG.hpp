@@ -40,22 +40,22 @@ protected:
 };
 
 
-class FileFormats : public QObject
-{
-	Q_OBJECT
-public:
-	FileFormats(QObject* parent = 0);
-	QStringList getAvailableDecodeFileFormats() const;
-	QStringList getAvailableEncodeFileFormats() const;
-private:
-	// typedef struct {
-	// 	bool decode, encode : 1;
-	// 	QString name, long_name;
-	// } FileFormatsT;
+// class FileFormats : public QObject
+// {
+// 	Q_OBJECT
+// public:
+// 	FileFormats(QObject* parent = 0);
+QStringList getAvailableDecodeFileFormats();
+QStringList getAvailableEncodeFileFormats();
+// private:
+// 	// typedef struct {
+// 	// 	bool decode, encode : 1;
+// 	// 	QString name, long_name;
+// 	// } FileFormatsT;
 	
-	QStringList encodeFileFormats;
-	QStringList decodeFileFormats;
-};
+// 	QStringList encodeFileFormats;
+// 	QStringList decodeFileFormats;
+// };
 
 enum Appointment {DECODE=1, ENCODE=2};
 class Codecs : public QObject//TODO подумать: может переделать на ф-ии ??
