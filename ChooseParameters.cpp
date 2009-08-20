@@ -8,7 +8,7 @@
 
 //--------------------------------------------------------------------------------//
 
-EmptyChoose::EmptyChoose (QWidget* parent) 
+EmptyChoose::EmptyChoose (int id, QWidget* parent) 
 	: QLabel(tr("choose container/codec in tree"), parent)
 {
 }
@@ -41,21 +41,21 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 		QString name;
 		switch (info[i].first)
 		{
-		case    CODEC_TYPE_UNKNOWN  : name = "Unknown"; item = new EmptyChoose; break ;
-		case    CODEC_TYPE_VIDEO : name = "Video"; item = new ChooseVideoCodec; break ;
-		case 	CODEC_TYPE_AUDIO : name = "Audio"; item = new ChooseAudioCodec; break ;
-		case	CODEC_TYPE_DATA : name = "Data"; item = new EmptyChoose; break ;
-		case	CODEC_TYPE_SUBTITLE : name = "Subtitle"; item = new EmptyChoose; break ;
-		case	CODEC_TYPE_NB : name = "NB"; item = new EmptyChoose; break ;
+		case    CODEC_TYPE_UNKNOWN  : name = "Unknown#"; item = new EmptyChoose(i); break ;
+		case    CODEC_TYPE_VIDEO : name = "Video#"; item = new ChooseVideoCodec; break ;
+		case 	CODEC_TYPE_AUDIO : name = "Audio#"; item = new ChooseAudioCodec; break ;
+		case	CODEC_TYPE_DATA : name = "Data#"; item = new EmptyChoose(i); break ;
+		case	CODEC_TYPE_SUBTITLE : name = "Subtitle#"; item = new EmptyChoose(i); break ;
+		case	CODEC_TYPE_NB : name = "NB#"; item = new EmptyChoose(i); break ;
 		default: 
 			name = "undefined type"; break ;
 		}
 			
-		QStringList fields(name);
 
 		QString n;
 		n.setNum(cnt_streams[info[i].first]++);
-		selectors->addTab(item,  (name + (tr(" #")) + n));
+		QStringList fields(name + n);
+		selectors->addTab(item,  (name + n));
 		QObject::connect(item, SIGNAL(parametersChanged(int, QString)), this, SLOT(codecParametersChanged(int, QString)));
 //FIXME дописать чтоб изменения посылало сигнал дляя изменения строки опций
 

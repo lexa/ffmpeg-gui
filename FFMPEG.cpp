@@ -61,7 +61,7 @@ FileFormats(bool need_decode, bool need_encode)
 		last_name= name;
 
 		if (need_decode && decode)
-			availFileFormats.append(name);
+			availFileFormats.append(QString(name));
 		if (need_encode && encode)
 			availFileFormats.append(name);
 	}
@@ -207,7 +207,7 @@ FileInfo(QString filename)
 //		qWarning(buf);
 //		fields << buf;
 
-		rez.append(qMakePair(pFormatCtx->streams[i]->codec->codec_type, QString(buf)));
+		rez.append(qMakePair(pFormatCtx->streams[i]->codec->codec_type, QString(buf).remove(0, 7)));//FIXME понормальному именовать
 
 //		QTreeWidgetItem* stream = new QTreeWidgetItem(fields );
 //		container->addChild(stream);

@@ -31,9 +31,11 @@ class EmptyChoose : public QLabel
 {
 	Q_OBJECT
 public:
-	EmptyChoose(QWidget* parent=0);
-	virtual QString getFormat() {return QString("");};
-	virtual ~EmptyChoose() {};
+	EmptyChoose(int id, QWidget* parent=0);
+	~EmptyChoose() {};
+signals:
+	void parametersChanged(int, QString);
+
 };
 
 
