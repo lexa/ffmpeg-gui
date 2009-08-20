@@ -29,8 +29,9 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 		return;
 	QTreeWidgetItem* container = new QTreeWidgetItem(QStringList(tr("Container")) << info[0].second);
 
-	selectors->addTab(new ChooseFileFormat, tr("Container"));
-
+	QWidget* container_tab = new ChooseFileFormat(0);
+	selectors->addTab(container_tab, tr("Container"));
+	QObject::connect(container_tab, SIGNAL(parametersChanged(int, QString)), this, SLOT(codecParametersChanged(int, QString)));
 	
 	QHash<CodecType, int> cnt_streams;//кол-во стримов каждого типа
 
@@ -72,10 +73,11 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 void 
 ChooseParameters::codecParametersChanged(int n , QString p)
 {
-	while (listParameters.length() < n)
+	while (listParameters.length() <= n)
 		listParameters.append ("");
 
 	listParameters[n] = p;
 	QStringList tmp(listParameters);
 	emit parametersChanged(tmp.join("    "));
+	qWarning() << tmp.join("    ");
 }

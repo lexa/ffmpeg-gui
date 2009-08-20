@@ -4,7 +4,6 @@
 #include <QApplication>
 #include <QPushButton>
 #include <QComboBox>
-#include <QFileDialog>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -33,22 +32,7 @@ extern "C" {
 #include "FFMPEG.hpp"
 #include "ChooseParameters.hpp"
 
-class SelectionFile 
-	: public QWidget
-{
-	Q_OBJECT
-public:
- 	SelectionFile (QString label, QWidget* parent = 0);
-private slots:
-	void showFileDialog();
-	void emitFileChanged ();
-private:
-	QLineEdit* inputFilename;
-	QString label;
-signals:
-	void fileChanged(QString);
-};
-
+#include "Utils.hpp"
 
 class MainWindow 
 	: public QWidget

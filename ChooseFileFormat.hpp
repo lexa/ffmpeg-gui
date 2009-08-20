@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 
 #include "FFMPEG.hpp"
+#include "Utils.hpp"
 
 //виджет в котором можно выбрать тип контейнера в который конвертить
 class ChooseFileFormat :
@@ -14,15 +15,19 @@ class ChooseFileFormat :
 {
 	Q_OBJECT
 public:
-	ChooseFileFormat (QWidget* parent = 0);
+	ChooseFileFormat (int id, QWidget* parent = 0);
 	QString getFormat();//возращает выбраный формат файла (опция -f)
 //	~ChooseFileFormat() {};
 signals:
 	void parametersChanged(int, QString);
 private:
 	QString format;
+	QString outFile;
+	int id;
 private slots:
 	void setFormat(const QString);
+	void setOutFile(QString );
+	void collectLineOptions();
 };
 
 #endif

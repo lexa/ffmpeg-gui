@@ -3,46 +3,6 @@
 #include <iostream>
 
 
-void
-SelectionFile::showFileDialog()
-{
-//	std::cerr << "file dialog" << std::endl;
-	QString filename = QFileDialog::getOpenFileName(this, label);
-//	qWarning() << filename ;
-
-	inputFilename->setText(filename);
-//	std::cerr << "end" << std::endl;
-}
-
-
-void 
-SelectionFile::emitFileChanged ()
-{
-	emit fileChanged(inputFilename->text());
-}
-
-SelectionFile::SelectionFile (QString label, QWidget* parent)
-	:QWidget(parent)
-{
-	QLabel *inputLabel = new QLabel(label);
-	this->label = label;
-	
-	inputFilename = new QLineEdit;
-	QPushButton* selectFile = new QPushButton(tr("Select File"));
-
-	QHBoxLayout *layoutFile = new QHBoxLayout;
-	layoutFile->addWidget (inputLabel);
-	layoutFile->addWidget (inputFilename);
-	layoutFile->addWidget (selectFile);
-
-	QObject::connect (selectFile, SIGNAL(clicked()), this, SLOT(showFileDialog()));
-	QObject::connect (inputFilename, SIGNAL(textChanged(QString)), this, SLOT(emitFileChanged()) );
-	QVBoxLayout *layoutMain = new QVBoxLayout;
-	layoutMain->addLayout(layoutFile);
-	setLayout(layoutMain);
-
-}
-
 void 
 MainWindow::inputFileChanged(QString filename)
 {	
