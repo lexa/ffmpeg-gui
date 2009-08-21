@@ -44,7 +44,8 @@ private slots:
 	void on_comboBox_activated (const QString);
 private:
 	void emitParametersChanged();
-	QString outFile, format;
+	QString outFile;
+	QStringList format;
 	int id;
 };
 

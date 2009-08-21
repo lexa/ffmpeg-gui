@@ -9,8 +9,9 @@ EmptyChoose::EmptyChoose (int id, QWidget* parent)
 //--------------------------------------------------------------------------------//
 
 ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
-	:QSplitter(parent), filename(filename)
+	:QSplitter(parent)
 {
+	this->filename=filename;
 	tree = new QTreeWidget;
 	tree->setColumnCount(2);
 	tree->setHeaderLabels(QStringList("type") << "value");
@@ -69,14 +70,13 @@ ChooseParameters::codecParametersChanged(int n , QStringList p)
 		listParameters.append (QStringList(""));
 
 	listParameters[n] = p;
-	QStringList tmp, list;
+	QStringList tmp("-i"), list;
+	tmp << filename;
 	foreach(list, listParameters)
 	{
 		tmp.append(list);
 	};
 
-	tmp.push_front(QString(filename));
-	tmp.push_front(QString("-i"));
-	qWarning() << "ffmpeg parameters : "<< listParameters;
+	qWarning() << "ffmpeg parameters : "<< tmp;
 	emit parametersChanged(tmp);
 }

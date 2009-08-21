@@ -31,7 +31,7 @@
 void
 ChooseFileFormat::on_comboBox_activated(const QString text)
 {
-	format = text;
+	format = QStringList(QString("-f")) << text;
 	emitParametersChanged();
 }
 
@@ -45,7 +45,7 @@ ChooseFileFormat::on_lineEdit_textEdited(QString text)
  void
 ChooseFileFormat::emitParametersChanged()
 {
-	emit parametersChanged(id, QStringList("-f") << format << outFile);
+	emit parametersChanged(id, QStringList( format) << outFile);
 }
 
 ChooseFileFormat::ChooseFileFormat (int id, QWidget* parent)
