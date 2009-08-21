@@ -8,7 +8,7 @@
 
 #include "FFMPEG.hpp"
 #include "Utils.hpp"
-#include "ui_example.h"
+#include "ui_ChooseFileFormat.h"
 
 //виджет в котором можно выбрать тип контейнера в который конвертить
 // class ChooseFileFormat :
@@ -32,13 +32,20 @@
 // };
 
 class ChooseFileFormat :
-	public QWidget, private Ui::Form
+	public QWidget, private Ui::ChooseFileFormat
 {
 	Q_OBJECT
 public:
 	ChooseFileFormat (int id, QWidget* parent = 0);
 signals:
-	void parametersChanged(int, QString);
+	void parametersChanged(int, QStringList);
+private slots:
+	void on_lineEdit_textEdited(QString);
+	void on_comboBox_activated (const QString);
+private:
+	void emitParametersChanged();
+	QString outFile, format;
+	int id;
 };
 
 #endif

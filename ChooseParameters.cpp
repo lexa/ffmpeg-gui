@@ -9,14 +9,14 @@ EmptyChoose::EmptyChoose (int id, QWidget* parent)
 //--------------------------------------------------------------------------------//
 
 ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
-	:QSplitter(parent)
+	:QSplitter(parent), filename(filename)
 {
 	tree = new QTreeWidget;
 	tree->setColumnCount(2);
 	tree->setHeaderLabels(QStringList("type") << "value");
-	addWidget(tree);
+	this->addWidget(tree);
 	QTabWidget* selectors = new QTabWidget;
-	addWidget(selectors);
+	this->addWidget(selectors);
 
  	QList<QPair<CodecType, QString> > info = FileInfo(filename);
 	if (info.length() == 0)
@@ -25,7 +25,7 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 
 	QWidget* container_tab = new ChooseFileFormat(0);
 	selectors->addTab(container_tab, tr("Container"));
-	QObject::connect(container_tab, SIGNAL(parametersChanged(int, QString)), this, SLOT(codecParametersChanged(int, QString)));
+	QObject::connect(container_tab, SIGNAL(parametersChanged(int, QStringList)), this, SLOT(codecParametersChanged(int, QStringList)));
 	
 	QHash<CodecType, int> cnt_streams;//кол-во стримов каждого типа
 
@@ -50,7 +50,7 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 		n.setNum(cnt_streams[info[i].first]++);
 		QStringList fields(name + n);
 		selectors->addTab(item,  (name + n));
-		QObject::connect(item, SIGNAL(parametersChanged(int, QString)), this, SLOT(codecParametersChanged(int, QString)));
+		QObject::connect(item, SIGNAL(parametersChanged(int, QStringList)), this, SLOT(codecParametersChanged(int, QStringList)));
 //при изменении посылало сигнал дляя изменения строки опций
 
 		fields << info[i].second;
@@ -63,13 +63,20 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 }
 
 void 
-ChooseParameters::codecParametersChanged(int n , QString p)
+ChooseParameters::codecParametersChanged(int n , QStringList p)
 {
 	while (listParameters.length() <= n)
-		listParameters.append ("");
+		listParameters.append (QStringList(""));
 
 	listParameters[n] = p;
-	QStringList tmp(listParameters);
-	qWarning() << tmp.join("    ");
-	emit parametersChanged(tmp.join("    "));
+	QStringList tmp, list;
+	foreach(list, listParameters)
+	{
+		tmp.append(list);
+	};
+
+	tmp.push_front(QString(filename));
+	tmp.push_front(QString("-i"));
+	qWarning() << "ffmpeg parameters : "<< listParameters;
+	emit parametersChanged(tmp);
 }

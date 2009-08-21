@@ -28,28 +28,32 @@
 // // 	return format;
 // // }
 
-// void
-// ChooseFileFormat::setFormat(const QString text)
-// {
-// 	format = text;
-// 	collectLineOptions();
-// }
+void
+ChooseFileFormat::on_comboBox_activated(const QString text)
+{
+	format = text;
+	emitParametersChanged();
+}
 
-// void
-// ChooseFileFormat::setOutFile(QString text)
-// {
-//  	outFile = text;
-// 	collectLineOptions();
-// }
-// void
-// ChooseFileFormat::collectLineOptions()
-// {
-// //	qWarning() << (QString("-f ") + format + "  " + outFile);
-// 	emit parametersChanged(id, (QString("-f ") + format + "  " + outFile));
-// }
+void
+ChooseFileFormat::on_lineEdit_textEdited(QString text)
+{
+	//set out file
+ 	outFile = text;
+	emitParametersChanged();
+}
+ void
+ChooseFileFormat::emitParametersChanged()
+{
+	emit parametersChanged(id, QStringList("-f") << format << outFile);
+}
 
 ChooseFileFormat::ChooseFileFormat (int id, QWidget* parent)
- 	:QWidget (parent)
+ 	:QWidget (parent), id(id)
 {
 	setupUi(this);
+ 	QStringList availFormats = getAvailableEncodeFileFormats();
+	comboBox->addItems(availFormats);
+
+// 	setFormat(availFormats[0]);
 }

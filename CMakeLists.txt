@@ -12,7 +12,7 @@ link_directories (${QT_LIBRARY_DIR})
 SET(MOC_HEADERS  ./MainWindow.hpp ./FFMPEG.hpp ./ChooseParameters.hpp ./ChooseAudioCodec.hpp ./ChooseVideoCodec.hpp ./ChooseFileFormat.hpp ./Utils.hpp ./StartFFmpeg.hpp)
 
 SET( UIS
-./example.ui
+./ChooseFileFormat.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS ${MOC_HEADERS} )

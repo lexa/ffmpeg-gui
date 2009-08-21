@@ -27,7 +27,6 @@ MainWindow::MainWindow (QWidget *parent)
 //	top_line->addWidget(outputFile);
 	top_line->addStretch(0);
 
-	QObject::connect(inputFile, SIGNAL(fileChanged(QString)), this, SLOT(inputFileChanged(QString)));
 //	QObject::connect(outputFile, SIGNAL(fileChanged(QString)), this, SLOT(outputFileChanged(QString)));
 
 	params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
@@ -43,9 +42,11 @@ MainWindow::MainWindow (QWidget *parent)
 	layoutMain->addWidget(ffmpeg);
 //	layoutMain->setStretch(1, 1);
 
+
 	setLayout(layoutMain);
 
-
+	QObject::connect(inputFile, SIGNAL(fileChanged(QString)), this, SLOT(inputFileChanged(QString)));
 	QObject::connect (convert, SIGNAL(clicked()), ffmpeg, SLOT(start())); 
+	QObject::connect (params, SIGNAL(parametersChanged(QStringList)), ffmpeg, SLOT(parametersChanged(QStringList))); 
 	setWindowTitle(tr("ffmpeg-gui"));
 }

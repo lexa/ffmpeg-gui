@@ -19,7 +19,7 @@ StartFFMPEG::parametersChanged(QStringList new_params)
 void 
 StartFFMPEG::start()
 {
-	qWarning() << "start";
+	qWarning() << "start" << params;
 	ffmpeg->start("ffmpeg", params);//FIXME путь к ffmpeg надо получать при сборке
 	
 }

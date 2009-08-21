@@ -16,6 +16,7 @@
 #include <QByteArrayMatcher>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QSplitter>
 
 
 
@@ -45,8 +46,9 @@ public:
 	virtual ~MainWindow () {};
 
 private:
-	QVBoxLayout *layoutMain;
+//	QVBoxLayout *layoutMain;
 	ChooseParameters *params;
+	QVBoxLayout* layoutMain;
 private slots:
 	void inputFileChanged(QString filename);
 };

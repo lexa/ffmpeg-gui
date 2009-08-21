@@ -48,17 +48,18 @@ class ChooseParameters :
 public:
 	ChooseParameters(QString filename, QWidget *parent = 0);
 signals:
-	void parametersChanged (QString);//испускается когда строка для кодирования меняется
+	void parametersChanged (QStringList);//испускается когда строка для кодирования меняется
 
 	// public slots:
 	// 	 void setFilename(QString filename);
 private slots:
 //	void currentItemChanged (QTreeWidgetItem* current);//когда элемент из дерева выбирается
-	void codecParametersChanged(int, QString);//собственно очерёдность потока и его параметры 
+	void codecParametersChanged(int, QStringList);//собственно очерёдность потока и его параметры 
 private:
  	QTreeWidget *tree;
 	QSplitter* l;
-	QList<QString> listParameters;
+	QList<QStringList> listParameters;
+	QString filename;
 };
 
 #endif //CHOOSE_PARAMETERS_H_
