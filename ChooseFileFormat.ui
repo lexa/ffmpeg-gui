@@ -32,6 +32,13 @@
      <item>
       <widget class="QLineEdit" name="lineEdit"/>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Create</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -51,7 +58,7 @@
    <item>
     <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>Advanced(not implemenred)</string>
+      <string>Advanced(not implemented)</string>
      </property>
     </widget>
    </item>
