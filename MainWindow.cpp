@@ -11,6 +11,7 @@ MainWindow::inputFileChanged(QString filename)
 	delete (params);
 	params = new ChooseParameters(filename);
 	layoutMain->insertWidget(1, params, 1);
+	QObject::connect (params, SIGNAL(parametersChanged(QStringList)), ffmpeg, SLOT(parametersChanged(QStringList))); 
 //	layoutMain->setStretch(1, 1);
 	
 }
@@ -37,7 +38,7 @@ MainWindow::MainWindow (QWidget *parent)
 	layoutMain->addLayout(top_line);
 	layoutMain->addWidget(params, 1);//FIXME убрать ???
 	QPushButton* convert = new QPushButton(tr("Convert"));
-	StartFFMPEG* ffmpeg = new StartFFMPEG;
+	ffmpeg = new StartFFMPEG;
 	layoutMain->addWidget(convert);
 	layoutMain->addWidget(ffmpeg);
 //	layoutMain->setStretch(1, 1);

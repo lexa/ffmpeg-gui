@@ -49,6 +49,7 @@ private:
 //	QVBoxLayout *layoutMain;
 	ChooseParameters *params;
 	QVBoxLayout* layoutMain;
+	StartFFMPEG* ffmpeg;
 private slots:
 	void inputFileChanged(QString filename);
 };
