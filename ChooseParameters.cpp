@@ -1,11 +1,5 @@
 #include "ChooseParameters.hpp"
 
-
-
-//--------------------------------------------------------------------------------//
-//--------------------------------------------------------------------------------//
-
-
 //--------------------------------------------------------------------------------//
 
 EmptyChoose::EmptyChoose (int id, QWidget* parent) 
@@ -57,7 +51,7 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 		QStringList fields(name + n);
 		selectors->addTab(item,  (name + n));
 		QObject::connect(item, SIGNAL(parametersChanged(int, QString)), this, SLOT(codecParametersChanged(int, QString)));
-//FIXME дописать чтоб изменения посылало сигнал дляя изменения строки опций
+//при изменении посылало сигнал дляя изменения строки опций
 
 		fields << info[i].second;
 			
@@ -76,6 +70,6 @@ ChooseParameters::codecParametersChanged(int n , QString p)
 
 	listParameters[n] = p;
 	QStringList tmp(listParameters);
-	emit parametersChanged(tmp.join("    "));
 	qWarning() << tmp.join("    ");
+	emit parametersChanged(tmp.join("    "));
 }

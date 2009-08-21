@@ -207,7 +207,9 @@ FileInfo(QString filename)
 //		qWarning(buf);
 //		fields << buf;
 
-		rez.append(qMakePair(pFormatCtx->streams[i]->codec->codec_type, QString(buf).remove(0, 7)));//FIXME понормальному именовать
+		char *crop_buf = buf;
+		while (! isblank(*crop_buf++));//отсекаем первое слово в строке
+		rez.append(qMakePair(pFormatCtx->streams[i]->codec->codec_type, QString(crop_buf)));
 
 //		QTreeWidgetItem* stream = new QTreeWidgetItem(fields );
 //		container->addChild(stream);

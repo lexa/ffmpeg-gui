@@ -33,6 +33,7 @@ extern "C" {
 #include "ChooseParameters.hpp"
 
 #include "Utils.hpp"
+#include "StartFFmpeg.hpp"
 
 class MainWindow 
 	: public QWidget
@@ -44,13 +45,10 @@ public:
 	virtual ~MainWindow () {};
 
 private:
-//	SelectionFile* inputFile;
-//	SelectionFile* outputFile;
 	QVBoxLayout *layoutMain;
 	ChooseParameters *params;
 private slots:
 	void inputFileChanged(QString filename);
-//	void outputFileChanged(QString filename);
 };
 
 #endif //MAIN_WINDOW_H_

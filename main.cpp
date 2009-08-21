@@ -3,7 +3,7 @@
 #include <QPushButton>
 #include <QWidget>
 #include "MainWindow.hpp"
-#include "FFMPEG.hpp"
+//#include "FFMPEG.hpp"
 
 
 int main(int argc, char *argv[])

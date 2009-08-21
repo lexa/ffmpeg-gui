@@ -36,12 +36,16 @@ MainWindow::MainWindow (QWidget *parent)
 	layoutMain = new QVBoxLayout;
 
 	layoutMain->addLayout(top_line);
-	layoutMain->addWidget(params);//FIXME убрать ???
-	layoutMain->addWidget(new QPushButton(tr("Convert")));
-	layoutMain->setStretch(1, 1);
+	layoutMain->addWidget(params, 1);//FIXME убрать ???
+	QPushButton* convert = new QPushButton(tr("Convert"));
+	StartFFMPEG* ffmpeg = new StartFFMPEG;
+	layoutMain->addWidget(convert);
+	layoutMain->addWidget(ffmpeg);
+//	layoutMain->setStretch(1, 1);
 
 	setLayout(layoutMain);
 
-//	QObject::connect (inputFileName, SIGNAL(inputFileChanged(QString)), params, SLOT(setFilename(QString))); 
+
+	QObject::connect (convert, SIGNAL(clicked()), ffmpeg, SLOT(start())); 
 	setWindowTitle(tr("ffmpeg-gui"));
 }
