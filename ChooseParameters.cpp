@@ -37,7 +37,7 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 		switch (info[i].first)
 		{
 		case    CODEC_TYPE_UNKNOWN  : name = "Unknown#"; item = new EmptyChoose(i); break ;
-		case    CODEC_TYPE_VIDEO : name = "Video#"; item = new ChooseVideoCodec; break ;
+		case    CODEC_TYPE_VIDEO : name = "Video#"; item = new ChooseVideoCodec(i); break ;
 		case 	CODEC_TYPE_AUDIO : name = "Audio#"; item = new ChooseAudioCodec; break ;
 		case	CODEC_TYPE_DATA : name = "Data#"; item = new EmptyChoose(i); break ;
 		case	CODEC_TYPE_SUBTITLE : name = "Subtitle#"; item = new EmptyChoose(i); break ;

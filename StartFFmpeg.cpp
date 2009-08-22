@@ -19,9 +19,16 @@ StartFFMPEG::parametersChanged(QStringList new_params)
 void 
 StartFFMPEG::start()
 {
-	qWarning() << "start" << params;
-	ffmpeg->start("ffmpeg", params);//FIXME путь к ffmpeg надо получать при сборке
-	
+	QString tmp;
+	QStringList params_without_space;
+	foreach(tmp, params)
+	{
+		if (!tmp.isEmpty()) 
+			params_without_space.append(tmp);
+	}
+
+	qWarning() << "start" << params_without_space;
+	ffmpeg->start("ffmpeg", params_without_space);//FIXME путь к ffmpeg надо получать при сборке
 }
 
 void 

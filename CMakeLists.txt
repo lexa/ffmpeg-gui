@@ -13,6 +13,7 @@ SET(MOC_HEADERS  ./MainWindow.hpp ./FFMPEG.hpp ./ChooseParameters.hpp ./ChooseAu
 
 SET( UIS
 ./ChooseFileFormat.ui
+./ChooseVideoCodec.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS ${MOC_HEADERS} )

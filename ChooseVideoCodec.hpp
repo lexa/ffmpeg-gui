@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QLabel>
 
+#include "ui_ChooseVideoCodec.h"
 #include "FFMPEG.hpp"
 
 
@@ -14,14 +15,22 @@ class ChooseVideoCodec :
 {
 	Q_OBJECT
 public:
-	ChooseVideoCodec (QWidget* parent = 0);
-//	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
-	virtual ~ChooseVideoCodec() {};
+	ChooseVideoCodec (int, QWidget* parent = 0);
 signals:
-	void parametersChanged(int, QString);
+	void parametersChanged(int, QStringList);
 private:
-	QString format;
+	void emitParametersChanged();
+
+	QString codec;
+	int bitrate;
+	QString size;
+	QString aspect;
+	Ui::ChooseVideoCodec ui;
+	int id;
 private slots:
-	void setFormat(const QString);
+	void on_video_codec_activated(const QString);
+	void on_size_activated(const QString);
+	void on_aspect_activated(const QString);
+	void on_bitrate_valueChanged(int);
 };
 #endif
