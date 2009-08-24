@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QSplitter>
 #include <QHash>
+#include <QMap>
 
 #include "FFMPEG.hpp"
 
@@ -60,6 +61,7 @@ private:
 	QSplitter* l;
 	QList<QStringList> listParameters;
 	QString filename;
+	QMap <int, int> scheme; // показывает соотвестие между номером виджета и порядком его параметров в троке 
 };
 
 #endif //CHOOSE_PARAMETERS_H_

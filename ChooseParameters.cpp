@@ -26,6 +26,7 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 
 	QWidget* container_tab = new ChooseFileFormat(0);
 	selectors->addTab(container_tab, tr("Container"));
+	scheme.insert(0, info.length());//опции для container идут последгними
 	QObject::connect(container_tab, SIGNAL(parametersChanged(int, QStringList)), this, SLOT(codecParametersChanged(int, QStringList)));
 	
 	QHash<CodecType, int> cnt_streams;//кол-во стримов каждого типа
@@ -46,6 +47,7 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 			name = "undefined type"; break ;
 		}
 			
+		scheme.insert(i, i-1);
 
 		QString n;
 		n.setNum(cnt_streams[info[i].first]++);
@@ -59,18 +61,28 @@ ChooseParameters::ChooseParameters(QString filename, QWidget *parent)
 		container->addChild(new QTreeWidgetItem(fields));
 	}
 
+
 	tree->addTopLevelItem (container);
 	container->setExpanded(true);//The QTreeWidgetItem must be added to the QTreeWidget before calling this function.
 }
 
 void 
-ChooseParameters::codecParametersChanged(int n , QStringList p)
+ChooseParameters::codecParametersChanged(int k , QStringList p)
 {
+	if (!scheme.contains(k))
+	{
+		qWarning() << "Internal error in codecParametersChanged";
+		return;
+	}
+		
+	int n = scheme[k];
 	while (listParameters.length() <= n)
 		listParameters.append (QStringList(""));
 
 	listParameters[n] = p;
-	QStringList tmp("-i"), list;
+	QStringList tmp("-y"), list;
+	
+	tmp << "-i";
 	tmp << filename;
 	foreach(list, listParameters)
 	{
