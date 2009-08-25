@@ -30,7 +30,7 @@ ChooseAudioCodec::getParams() const
 {
 	QStringList tmp;
 	tmp << "-acodec"  << (audio_codec.isEmpty()?"copy":audio_codec)
-	    << check_not_null(audio_bitrate, "-ab") 
+	    << check_not_null(audio_bitrate*1024, "-ab") 
 	    << check_not_null(num_chan, "-ac") ;
 	return tmp;
 }

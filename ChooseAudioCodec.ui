@@ -33,7 +33,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Bitrate, kb/s:</string>
+        <string>Bitrate, KiB/s:</string>
        </property>
       </widget>
      </item>
