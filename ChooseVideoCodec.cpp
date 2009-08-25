@@ -92,9 +92,9 @@ ChooseVideoCodec::getParams() const
 	QStringList tmp;
 
 	tmp << "-vcodec" << (codec.isEmpty()?"copy":codec)
-	    << check_not_null(bitrate, "-b") 
-	    << check_not_null(max_bitrate, "-maxrate")
-	    << check_not_null(min_bitrate, "-minrate")
+	    << check_not_null(bitrate*1000, "-b") 
+	    << check_not_null(max_bitrate*1000, "-maxrate")
+	    << check_not_null(min_bitrate*1000, "-minrate")
 	    << "-bufsize" << "6000k" 
 	    << (!size.isEmpty()?"-s":"") << size
 	    << (!aspect.isEmpty()?"-aspect":"") << aspect;
