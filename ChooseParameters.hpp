@@ -7,11 +7,11 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSplitter>
-#include <QHash>
 #include <QMap>
 
 #include "FFMPEG.hpp"
 
+#include "ChooseGeneric.hpp"
 #include "ChooseAudioCodec.hpp"
 #include "ChooseFileFormat.hpp"
 #include "ChooseVideoCodec.hpp"
@@ -28,11 +28,11 @@
 
 
 
-class EmptyChoose : public QLabel
+class EmptyChoose : public GenericChoose
 {
 	Q_OBJECT
 public:
-	EmptyChoose(int id, QWidget* parent=0);
+	EmptyChoose(QWidget* parent=0);
 	~EmptyChoose() {};
 signals:
 	void parametersChanged(int, QString);
@@ -48,20 +48,22 @@ class ChooseParameters :
 	Q_OBJECT
 public:
 	ChooseParameters(QString filename, QWidget *parent = 0);
-signals:
-	void parametersChanged (QStringList);//испускается когда строка для кодирования меняется
+	QStringList getParams();
+// signals:
+// 	void parametersChanged (QStringList);//испускается когда строка для кодирования меняется
 
 	// public slots:
 	// 	 void setFilename(QString filename);
-private slots:
+//private slots:
 //	void currentItemChanged (QTreeWidgetItem* current);//когда элемент из дерева выбирается
-	void codecParametersChanged(int, QStringList);//собственно очерёдность потока и его параметры 
+//	void codecParametersChanged(int, QStringList);//собственно очерёдность потока и его параметры 
 private:
  	QTreeWidget *tree;
 	QSplitter* l;
-	QList<QStringList> listParameters;
+//	QList<QStringList> listParameters;
 	QString filename;
-	QMap <int, int> scheme; // показывает соотвестие между номером виджета и порядком его параметров в троке 
+	QList <GenericChoose* > built_widgets;
+	QMap<CodecType, int> cnt_streams;//кол-во стримов каждого типа
 };
 
 #endif //CHOOSE_PARAMETERS_H_

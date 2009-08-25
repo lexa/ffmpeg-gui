@@ -37,17 +37,32 @@ MainWindow::MainWindow (QWidget *parent)
 
 	layoutMain->addLayout(top_line);
 	layoutMain->addWidget(params, 1);//FIXME убрать ???
-	QPushButton* convert = new QPushButton(tr("Convert"));
+	convert_button = new QPushButton(tr("Convert"));
 	ffmpeg = new StartFFMPEG;
-	layoutMain->addWidget(convert);
+	layoutMain->addWidget(convert_button);
 	layoutMain->addWidget(ffmpeg);
 //	layoutMain->setStretch(1, 1);
 
 
 	setLayout(layoutMain);
 
-	QObject::connect(inputFile, SIGNAL(fileChanged(QString)), this, SLOT(inputFileChanged(QString)));
-	QObject::connect (convert, SIGNAL(clicked()), ffmpeg, SLOT(start())); 
-	QObject::connect (params, SIGNAL(parametersChanged(QStringList)), ffmpeg, SLOT(parametersChanged(QStringList))); 
+	QObject::connect (inputFile, SIGNAL(fileChanged(QString)), this, SLOT(inputFileChanged(QString)));
+	QObject::connect (convert_button, SIGNAL(clicked()), this, SLOT(start_ffmpeg())); 
 	setWindowTitle(tr("ffmpeg-gui"));
+}
+
+void 
+MainWindow::start_ffmpeg()
+{
+	if (ffmpeg->started())
+	{
+		convert_button->setText(tr("Start ffmpeg"));
+		ffmpeg->stop();
+		qWarning() << "stop ffmpeg";
+	} else {
+		ffmpeg->parametersChanged(params->getParams());
+		ffmpeg->start();
+		convert_button->setText(tr("Stop ffmpeg"));
+		qWarning() << "start ffmpeg";
+	}
 }

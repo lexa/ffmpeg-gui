@@ -5,19 +5,21 @@
 #include <QWidget>
 #include <QLabel>
 
-#include "ui_ChooseVideoCodec.h"
 #include "FFMPEG.hpp"
-
+#include "Utils.hpp"
+#include "ChooseGeneric.hpp"
+#include "ui_ChooseVideoCodec.h"
 
 //виджет для выбора видео кодерка в который конвертить
 class ChooseVideoCodec :
-	public QWidget
+	public GenericChoose
 {
 	Q_OBJECT
 public:
-	ChooseVideoCodec (int, QWidget* parent = 0);
-signals:
-	void parametersChanged(int, QStringList);
+	ChooseVideoCodec (QWidget* parent = 0);
+//signals:
+//	void parametersChanged(int, QStringList);
+	QStringList getParams() const;
 private:
 	void emitParametersChanged();
 
@@ -26,8 +28,6 @@ private:
 	QString size;
 	QString aspect;
 	Ui::ChooseVideoCodec ui;
-	int id;
-	      
 private slots:
 	void on_video_codec_activated(const QString);
 	void on_size_activated(const QString);

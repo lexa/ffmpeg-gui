@@ -1,7 +1,7 @@
 #include "ChooseVideoCodec.hpp"
 
-ChooseVideoCodec::ChooseVideoCodec (int id, QWidget* parent)
-	:QWidget(parent)
+ChooseVideoCodec::ChooseVideoCodec (QWidget* parent)
+	:GenericChoose(parent)
 {
 // 	QComboBox* list = new QComboBox;
 // 	Codecs availCodecs ;
@@ -27,7 +27,6 @@ ChooseVideoCodec::ChooseVideoCodec (int id, QWidget* parent)
 // 	l->addItem(tmp);
 // 	setLayout(l);
 // 	QObject::connect(list, SIGNAL(activated(const QString)), this, SLOT(setFormat(const QString))); 
-	this->id = id;
 	ui.setupUi(this);
 	Codecs availCodecs ;
 	ui.video_codec->addItems(availCodecs.getAvailableCodecs(CODEC_TYPE_VIDEO, ENCODE));
@@ -41,7 +40,7 @@ ChooseVideoCodec::on_max_bitrate_valueChanged(int value)
 	max_bitrate = value;
 	// if (bitrate > max_bitrate)
 	// 	ui.bitrate->setValue(max_bitrate);
-	emitParametersChanged();
+//	emitParametersChanged();
 }
 
 void 
@@ -50,7 +49,7 @@ ChooseVideoCodec::on_min_bitrate_valueChanged(int value)
 	min_bitrate = value;
 	// if (bitrate < min_bitrate)
 	// 	ui.bitrate->setValue(min_bitrate);
-	emitParametersChanged();
+//	emitParametersChanged();
 }
 
 
@@ -58,21 +57,21 @@ void
 ChooseVideoCodec::on_video_codec_activated(const QString text)
 {
 	codec = text;
-	emitParametersChanged();
+//	emitParametersChanged();
 }
 
 void 
 ChooseVideoCodec::on_size_activated(const QString text)
 {
 	size = text.left(text.indexOf("("));
-	emitParametersChanged();
+//	emitParametersChanged();
 }
 
 void 
 ChooseVideoCodec::on_aspect_activated(const QString text)
 {
 	aspect = text;
-	emitParametersChanged();
+//	emitParametersChanged();
 }
 
 void 
@@ -83,32 +82,23 @@ ChooseVideoCodec::on_bitrate_valueChanged(int new_bitrate)
 		ui.min_bitrate->setValue(bitrate);
 	if (max_bitrate < bitrate) 
 		ui.max_bitrate->setValue(bitrate);
-	emitParametersChanged();
+//	emitParametersChanged();
 }
+
 
 QStringList
-chech_not_null (int x, QString key)
-{
-	QString str;
-	str.setNum(x, 10);
-	QStringList rez;
-	rez << ((x!=0)?key:"")  << ((x!=0)?str:"") ;
-	return rez;
-}
-
-void	
-ChooseVideoCodec::emitParametersChanged()
+ChooseVideoCodec::getParams() const
 {
 	QStringList tmp;
 
-	tmp << (!codec.isEmpty()?"-vcodec":"") << codec
-	    << chech_not_null(bitrate, "-b") 
-	    << chech_not_null(max_bitrate, "-maxrate")
-	    << chech_not_null(min_bitrate, "-minrate")
-	    << "-bufsize" << "3000k" 
+	tmp << "-vcodec" << (codec.isEmpty()?"copy":codec)
+	    << check_not_null(bitrate, "-b") 
+	    << check_not_null(max_bitrate, "-maxrate")
+	    << check_not_null(min_bitrate, "-minrate")
+	    << "-bufsize" << "6000k" 
 	    << (!size.isEmpty()?"-s":"") << size
 	    << (!aspect.isEmpty()?"-aspect":"") << aspect;
-	emit parametersChanged(id, tmp);
+	return tmp;
 }
 
 

@@ -3,24 +3,33 @@
 
 #include <QWidget>
 #include <QString>
+#include <QStringList>
 #include <QLabel>
 #include <QComboBox>
 
 #include "FFMPEG.hpp"
+#include "Utils.hpp"
+#include "ChooseGeneric.hpp"
+#include "ui_ChooseAudioCodec.h"
 
 class ChooseAudioCodec :
-	public QWidget
+	public GenericChoose
 {
 	Q_OBJECT
 public:
 	ChooseAudioCodec (QWidget* parent = 0);
-//	virtual QString getFormat();//возращает выбране св-ва кодека (по умолчанию copy)
-	virtual ~ChooseAudioCodec() {};
 signals:
-	void parametersChanged(int, QString);
+	void parametersChanged(int, QStringList);
 private:
 	QString format;
+	Ui::ChooseAudioCodec ui;
+	int num_chan, audio_bitrate;
+	QString audio_codec;
+//	void emitParametersChanged();
+	QStringList getParams() const;
 private slots:
-	void setFormat(const QString);
+	void on_audio_codec_activated(const QString);
+	void on_audio_bitrate_valueChanged(int);
+	void on_num_chan_valueChanged(int);
 };
-#endif
+#endif  //CHOOSE_AUDIO_CODEC_H_

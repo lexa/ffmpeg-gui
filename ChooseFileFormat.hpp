@@ -5,9 +5,11 @@
 #include <QWidget>
 #include <QComboBox>
 #include <QHBoxLayout>
+#include <QStringList>
 
 #include "FFMPEG.hpp"
 #include "Utils.hpp"
+#include "ChooseGeneric.hpp"
 #include "ui_ChooseFileFormat.h"
 
 //виджет в котором можно выбрать тип контейнера в который конвертить
@@ -32,11 +34,12 @@
 // };
 
 class ChooseFileFormat :
-	public QWidget, private Ui::ChooseFileFormat
+	public GenericChoose  
 {
 	Q_OBJECT
 public:
-	ChooseFileFormat (int id, QWidget* parent = 0);
+	ChooseFileFormat (QWidget* parent = 0);
+	virtual QStringList getParams() const;
 signals:
 	void parametersChanged(int, QStringList);
 private slots:
@@ -46,7 +49,8 @@ private:
 	void emitParametersChanged();
 	QString outFile;
 	QStringList format;
-	int id;
+//	int id;
+	Ui::ChooseFileFormat ui;
 };
 
 #endif

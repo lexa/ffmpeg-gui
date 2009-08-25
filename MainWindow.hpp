@@ -50,8 +50,10 @@ private:
 	ChooseParameters *params;
 	QVBoxLayout* layoutMain;
 	StartFFMPEG* ffmpeg;
+	QPushButton* convert_button;
 private slots:
 	void inputFileChanged(QString filename);
+	void start_ffmpeg();
 };
 
 #endif //MAIN_WINDOW_H_

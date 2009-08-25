@@ -1,25 +1,44 @@
 #include "ChooseAudioCodec.hpp"
 
 ChooseAudioCodec::ChooseAudioCodec (QWidget* parent)
-	:QWidget(parent), format("copy")
+	:GenericChoose(parent)
 {
-	QComboBox* list = new QComboBox;
+	ui.setupUi(this);
 	Codecs availCodecs ;
-	list->addItems(availCodecs.getAvailableCodecs(CODEC_TYPE_AUDIO, ENCODE));
-	QVBoxLayout* l = new QVBoxLayout;
-	QHBoxLayout* tmp = new QHBoxLayout;
-	
-	tmp->addWidget(new QLabel(tr("Audio Codec:")));
-	tmp->addWidget(list);
-	
-	l->addItem(tmp);
-	setLayout(l);
-	QObject::connect(list, SIGNAL(activated(const QString)), this, SLOT(setFormat(const QString))); 
+	ui.audio_codec->addItems(availCodecs.getAvailableCodecs(CODEC_TYPE_AUDIO, ENCODE));
+	ui.audio_codec->setCurrentIndex(-1);
+	audio_bitrate = num_chan = 0;
+}
+
+void 
+ChooseAudioCodec::on_audio_codec_activated(const QString text)
+{
+	audio_codec = text;
+//	emitParametersChanged();
+}
+
+void 
+ChooseAudioCodec::on_audio_bitrate_valueChanged(int value)
+{
+	audio_bitrate = value;
+//	emitParametersChanged();
+
+}
+
+QStringList
+ChooseAudioCodec::getParams() const
+{
+	QStringList tmp;
+	tmp << "-acodec"  << (audio_codec.isEmpty()?"copy":audio_codec)
+	    << check_not_null(audio_bitrate, "-ab") 
+	    << check_not_null(num_chan, "-ac") ;
+	return tmp;
 }
 
 
 void 
-ChooseAudioCodec::setFormat(const QString new_format)
+ChooseAudioCodec::on_num_chan_valueChanged(int value)
 {
-	format=new_format;
+	num_chan = value;
 }
+

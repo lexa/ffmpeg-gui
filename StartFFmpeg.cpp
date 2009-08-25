@@ -27,7 +27,7 @@ StartFFMPEG::start()
 			params_without_space.append(tmp);
 	}
 
-	qWarning() << "start" << params_without_space;
+	qWarning() << "start" << params_without_space.join("  ");
 	ffmpeg->start("ffmpeg", params_without_space);//FIXME путь к ffmpeg надо получать при сборке
 }
 
@@ -42,4 +42,10 @@ void
 StartFFMPEG::stop()
 {
 	ffmpeg->kill();
+}
+
+bool 
+StartFFMPEG::started() const
+{
+	return (QProcess::Running == ffmpeg->state());
 }

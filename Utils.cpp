@@ -47,3 +47,13 @@ AddLabel(QWidget* w, QString label)
 	layout->addWidget(w);
 	return layout;
 }
+
+QStringList
+check_not_null (int x, QString key)
+{
+	QString str;
+	str.setNum(x, 10);
+	QStringList rez;
+	rez << ((x!=0)?key:"")  << ((x!=0)?str:"") ;
+	return rez;
+}

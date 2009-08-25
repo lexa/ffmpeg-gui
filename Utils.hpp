@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QStringList>
+
 
 class SelectionFile 
 	: public QWidget
@@ -26,5 +28,8 @@ signals:
 };
 
 QHBoxLayout* AddLabel(QWidget* w, QString label="without label");
+
+QStringList check_not_null (int x, QString key);
+
 
 #endif

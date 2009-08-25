@@ -32,7 +32,6 @@ void
 ChooseFileFormat::on_comboBox_activated(const QString text)
 {
 	format = QStringList(QString("-f")) << text;
-	emitParametersChanged();
 }
 
 void
@@ -40,20 +39,19 @@ ChooseFileFormat::on_lineEdit_textEdited(QString text)
 {
 	//set out file
  	outFile = text;
-	emitParametersChanged();
-}
- void
-ChooseFileFormat::emitParametersChanged()
-{
-	emit parametersChanged(id, QStringList( format) << outFile);
 }
 
-ChooseFileFormat::ChooseFileFormat (int id, QWidget* parent)
- 	:QWidget (parent), id(id)
+
+QStringList
+ChooseFileFormat::getParams() const
 {
-	setupUi(this);
+	return QStringList(format) << outFile << ((ui.rewrite->checkState() == Qt::Checked)?"-y":"");
+}
+
+ChooseFileFormat::ChooseFileFormat (QWidget* parent)
+ 	:GenericChoose (parent)
+{
+	ui.setupUi(this);
  	QStringList availFormats = getAvailableEncodeFileFormats();
-	comboBox->addItems(availFormats);
-
-// 	setFormat(availFormats[0]);
+	ui.comboBox->addItems(availFormats);
 }
