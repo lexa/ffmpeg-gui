@@ -93,8 +93,8 @@ ChooseVideoCodec::getParams() const
 
 	tmp << "-vcodec" << (codec.isEmpty()?"copy":codec)
 	    << check_not_null(bitrate*1000, "-b") 
-	    << check_not_null(max_bitrate*1000, "-maxrate")
-	    << check_not_null(min_bitrate*1000, "-minrate")
+	    << check_not_null(max_bitrate*1024, "-maxrate")
+	    << check_not_null(min_bitrate*1024, "-minrate")
 	    << "-bufsize" << "6000k" 
 	    << (!size.isEmpty()?"-s":"") << size
 	    << (!aspect.isEmpty()?"-aspect":"") << aspect;

@@ -33,7 +33,7 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Maximum bitrate, kb/s:</string>
+        <string>Maximum bitrate, KiB/s:</string>
        </property>
       </widget>
      </item>
@@ -51,7 +51,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Bitrate, kb/s:</string>
+        <string>Bitrate, KiB/s:</string>
        </property>
       </widget>
      </item>
@@ -69,7 +69,7 @@
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Minimum bitrate, kb/s:</string>
+        <string>Minimum bitrate, KiB/s:</string>
        </property>
       </widget>
      </item>
