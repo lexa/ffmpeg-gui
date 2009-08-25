@@ -54,6 +54,7 @@ private:
 private slots:
 	void inputFileChanged(QString filename);
 	void start_ffmpeg();
+	void ffmpeg_stopped();
 };
 
 #endif //MAIN_WINDOW_H_

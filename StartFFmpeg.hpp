@@ -13,6 +13,8 @@ class StartFFMPEG
 public:
  	StartFFMPEG(QWidget* parent = 0);
 	bool started() const;
+signals:
+	void stopped(int);
 public slots:
 	void parametersChanged(QStringList);
 	void start();

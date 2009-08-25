@@ -21,4 +21,5 @@ int main(int argc, char *argv[])
 //	Codecs tmp;
 //	qWarning() << tmp.getAvailableCodecs(CODEC_TYPE_VIDEO, ENCODE);
 	return app.exec();
+//	return av_exit(0);
 }

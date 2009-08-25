@@ -48,7 +48,15 @@ MainWindow::MainWindow (QWidget *parent)
 
 	QObject::connect (inputFile, SIGNAL(fileChanged(QString)), this, SLOT(inputFileChanged(QString)));
 	QObject::connect (convert_button, SIGNAL(clicked()), this, SLOT(start_ffmpeg())); 
+	QObject::connect (ffmpeg, SIGNAL(stopped(int)), this, SLOT(ffmpeg_stopped())); 
 	setWindowTitle(tr("ffmpeg-gui"));
+}
+
+void
+MainWindow::ffmpeg_stopped()
+
+{
+	convert_button->setText(tr("Start ffmpeg"));
 }
 
 void 
@@ -56,7 +64,6 @@ MainWindow::start_ffmpeg()
 {
 	if (ffmpeg->started())
 	{
-		convert_button->setText(tr("Start ffmpeg"));
 		ffmpeg->stop();
 		qWarning() << "stop ffmpeg";
 	} else {

@@ -45,7 +45,7 @@ ChooseFileFormat::on_lineEdit_textEdited(QString text)
 QStringList
 ChooseFileFormat::getParams() const
 {
-	return QStringList(format) << outFile << ((ui.rewrite->checkState() == Qt::Checked)?"-y":"");
+	return QStringList(format) << ((ui.rewrite->checkState() == Qt::Checked)?"-y":"") << outFile ;
 }
 
 ChooseFileFormat::ChooseFileFormat (QWidget* parent)
