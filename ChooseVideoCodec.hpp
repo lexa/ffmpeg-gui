@@ -22,15 +22,18 @@ private:
 	void emitParametersChanged();
 
 	QString codec;
-	int bitrate;
+	int bitrate, max_bitrate, min_bitrate;
 	QString size;
 	QString aspect;
 	Ui::ChooseVideoCodec ui;
 	int id;
+	      
 private slots:
 	void on_video_codec_activated(const QString);
 	void on_size_activated(const QString);
 	void on_aspect_activated(const QString);
 	void on_bitrate_valueChanged(int);
+	void on_min_bitrate_valueChanged(int);
+	void on_max_bitrate_valueChanged(int);
 };
 #endif

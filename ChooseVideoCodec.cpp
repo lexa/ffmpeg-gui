@@ -32,7 +32,27 @@ ChooseVideoCodec::ChooseVideoCodec (int id, QWidget* parent)
 	Codecs availCodecs ;
 	ui.video_codec->addItems(availCodecs.getAvailableCodecs(CODEC_TYPE_VIDEO, ENCODE));
 	ui.video_codec->setCurrentIndex(-1);
+	bitrate = max_bitrate = min_bitrate = 0;
 }
+
+void 
+ChooseVideoCodec::on_max_bitrate_valueChanged(int value)
+{
+	max_bitrate = value;
+	// if (bitrate > max_bitrate)
+	// 	ui.bitrate->setValue(max_bitrate);
+	emitParametersChanged();
+}
+
+void 
+ChooseVideoCodec::on_min_bitrate_valueChanged(int value)
+{
+	min_bitrate = value;
+	// if (bitrate < min_bitrate)
+	// 	ui.bitrate->setValue(min_bitrate);
+	emitParametersChanged();
+}
+
 
 void 
 ChooseVideoCodec::on_video_codec_activated(const QString text)
@@ -59,19 +79,33 @@ void
 ChooseVideoCodec::on_bitrate_valueChanged(int new_bitrate)
 {
 	bitrate = new_bitrate;
+	if (min_bitrate > bitrate) 
+		ui.min_bitrate->setValue(bitrate);
+	if (max_bitrate < bitrate) 
+		ui.max_bitrate->setValue(bitrate);
 	emitParametersChanged();
 }
 
+QStringList
+chech_not_null (int x, QString key)
+{
+	QString str;
+	str.setNum(x, 10);
+	QStringList rez;
+	rez << ((x!=0)?key:"")  << ((x!=0)?str:"") ;
+	return rez;
+}
 
 void	
 ChooseVideoCodec::emitParametersChanged()
 {
 	QStringList tmp;
-	QString bitrate_s;
-	bitrate_s.setNum(bitrate, 10);
 
 	tmp << (!codec.isEmpty()?"-vcodec":"") << codec
-	    << ((bitrate!=0)?"-b":"")  << ((bitrate!=0)?bitrate_s:"") 
+	    << chech_not_null(bitrate, "-b") 
+	    << chech_not_null(max_bitrate, "-maxrate")
+	    << chech_not_null(min_bitrate, "-minrate")
+	    << "-bufsize" << "3000k" 
 	    << (!size.isEmpty()?"-s":"") << size
 	    << (!aspect.isEmpty()?"-aspect":"") << aspect;
 	emit parametersChanged(id, tmp);
