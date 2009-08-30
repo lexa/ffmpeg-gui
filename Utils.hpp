@@ -9,7 +9,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QStringList>
-
+#include <QUrl>
 
 class SelectionFile 
 	: public QWidget
@@ -17,9 +17,10 @@ class SelectionFile
 	Q_OBJECT
 public:
  	SelectionFile (QString label, QWidget* parent = 0);
+	void fileDropped(QUrl file_url);//FIXME переделать в слоты
 private slots:
 	void showFileDialog();
-	void emitFileChanged ();
+//	void emitFileChanged ();
 private:
 	QLineEdit* inputFilename;
 	QString label;

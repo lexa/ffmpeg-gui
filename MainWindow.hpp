@@ -17,6 +17,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QSplitter>
+#include <QDropEvent>
 
 
 
@@ -51,6 +52,10 @@ private:
 	QVBoxLayout* layoutMain;
 	StartFFMPEG* ffmpeg;
 	QPushButton* convert_button;
+	SelectionFile* inputFile;
+	void dropEvent(QDropEvent *event);
+	void dragEnterEvent(QDragEnterEvent *event);
+
 private slots:
 	void inputFileChanged(QString filename);
 	void start_ffmpeg();

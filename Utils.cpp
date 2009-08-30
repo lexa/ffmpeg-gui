@@ -12,11 +12,17 @@ SelectionFile::showFileDialog()
 }
 
 
-void 
-SelectionFile::emitFileChanged ()
+void
+SelectionFile::fileDropped(QUrl url)
 {
-	emit fileChanged(inputFilename->text());
+	inputFilename->setText(url.toString());
 }
+
+// void 
+// SelectionFile::emitFileChanged ()
+// {
+// 	emit fileChanged(inputFilename->text());
+// }
 
 SelectionFile::SelectionFile (QString label, QWidget* parent)
 	:QWidget(parent)
@@ -33,7 +39,7 @@ SelectionFile::SelectionFile (QString label, QWidget* parent)
 	layoutFile->addWidget (selectFile);
 
 	QObject::connect (selectFile, SIGNAL(clicked()), this, SLOT(showFileDialog()));
-	QObject::connect (inputFilename, SIGNAL(textChanged(QString)), this, SLOT(emitFileChanged()) );
+	QObject::connect (inputFilename, SIGNAL(textChanged(QString)), this, SIGNAL(fileChanged(QString)) );
 	QVBoxLayout *layoutMain = new QVBoxLayout;
 	layoutMain->addLayout(layoutFile);
 	setLayout(layoutMain);
@@ -47,6 +53,7 @@ AddLabel(QWidget* w, QString label)
 	layout->addWidget(w);
 	return layout;
 }
+
 
 QStringList
 check_not_null (int x, QString key)

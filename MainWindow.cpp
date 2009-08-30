@@ -11,7 +11,7 @@ MainWindow::inputFileChanged(QString filename)
 	delete (params);
 	params = new ChooseParameters(filename);
 	layoutMain->insertWidget(1, params, 1);
-	QObject::connect (params, SIGNAL(parametersChanged(QStringList)), ffmpeg, SLOT(parametersChanged(QStringList))); 
+//	QObject::connect (params, SIGNAL(parametersChanged(QStringList)), ffmpeg, SLOT(parametersChanged(QStringList))); 
 //	layoutMain->setStretch(1, 1);
 	
 }
@@ -21,7 +21,7 @@ MainWindow::inputFileChanged(QString filename)
 MainWindow::MainWindow (QWidget *parent)
 	:QWidget(parent)
 {
-	SelectionFile* inputFile = new SelectionFile(tr("Input File:"));
+	inputFile = new SelectionFile(tr("Input File:"));
 //	SelectionFile* outputFile = new SelectionFile(tr("Output File:"));
 	QHBoxLayout* top_line = new QHBoxLayout;
 	top_line->addWidget(inputFile);
@@ -30,8 +30,8 @@ MainWindow::MainWindow (QWidget *parent)
 
 //	QObject::connect(outputFile, SIGNAL(fileChanged(QString)), this, SLOT(outputFileChanged(QString)));
 
-	params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
-//	params = new ChooseParameters("");
+//	params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
+	params = new ChooseParameters("");
 
 	layoutMain = new QVBoxLayout;
 
@@ -50,7 +50,30 @@ MainWindow::MainWindow (QWidget *parent)
 	QObject::connect (convert_button, SIGNAL(clicked()), this, SLOT(start_ffmpeg())); 
 	QObject::connect (ffmpeg, SIGNAL(stopped(int)), this, SLOT(ffmpeg_stopped())); 
 	setWindowTitle(tr("ffmpeg-gui"));
+
+	setAcceptDrops(true);//разрешили перетаскивать
 }
+
+
+void 
+MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+	qWarning() << (event->mimeData()->formats()) ;
+	
+	if (event->mimeData()->hasUrls())
+		event->acceptProposedAction();
+}
+
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+	qWarning() << event->mimeData()->text();
+	inputFile->fileDropped((event->mimeData()->urls())[0]);
+	//FIXME возможна работа с несколькими файлами
+
+//	if (event->mimeData()->hasFormat("text/uri-list"))
+//		event->acceptProposedAction();
+		}
 
 void
 MainWindow::ffmpeg_stopped()
