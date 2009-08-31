@@ -57,7 +57,7 @@ private:
 	void dragEnterEvent(QDragEnterEvent *event);
 
 private slots:
-	void inputFileChanged(QString filename);
+	void inputFileChanged(QList<QUrl> filename);
 	void start_ffmpeg();
 	void ffmpeg_stopped();
 };

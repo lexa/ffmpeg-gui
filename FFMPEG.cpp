@@ -136,41 +136,34 @@ getAvailableEncodeFileFormats()
 	return FileFormats(1, 0);
 }
 
+QString
+FileInfo::container() const
+{
+	return container_;
+}
 
-
-// FileInfo::FileInfo(QWidget *parent)
-// 	:QWidget(parent)
-// {
-// 	tree = new QTreeWidget;
-// 	tree->setColumnCount(2);
-// 	tree->setHeaderItem(new QTreeWidgetItem(QStringList(tr("type")) << "value"));
-// 	QVBoxLayout *layout = new QVBoxLayout;
-// 	layout->addWidget (tree);
-// 	setLayout (layout);
-// }
-
-QList<QPair<CodecType, QString>  >
-FileInfo(QString filename)
+FileInfo::FileInfo(QUrl filename)
 {
 	LibAVC::instance();
 
 	AVFormatContext *pFormatCtx;
 	int err;
-	QList<QPair<CodecType, QString> > rez;
+//	QList<QPair<CodecType, QString> > rez;
 
-	if(0 != (err = av_open_input_file(&pFormatCtx, filename.toUtf8().data(), NULL, 0, NULL)))
+	if(0 != (err = av_open_input_file(&pFormatCtx, filename.toString().toUtf8().data(), NULL, 0, NULL)))
 	{
 		qWarning() << "av_open_input_file" << err;
-		return rez;
+		throw QString("can't open input file");
 	}
 	// Retrieve stream information
 	if(0 > (err = av_find_stream_info(pFormatCtx)))
 	{
 		qWarning() << "av_find_stream_info" ;
-		return rez;
+		av_close_input_file(pFormatCtx);
+		throw QString("can't find stream info");
 	}
 
-	rez.append(qMakePair(CODEC_TYPE_UNKNOWN, QString(pFormatCtx->iformat->name)));//контеёнер, ну вот такой хак пришлось ваять, TODO потом переписать когда будет работа со многими файлами
+	container_ = QString(pFormatCtx->iformat->name);
 
 //	dump_format(pFormatCtx, 0, "нужный файл", 0);//for debugging
 	
@@ -209,11 +202,15 @@ FileInfo(QString filename)
 
 		char *crop_buf = buf;
 		while (! isblank(*crop_buf++));//отсекаем первое слово в строке
-		rez.append(qMakePair(pFormatCtx->streams[i]->codec->codec_type, QString(crop_buf)));
+		streams.append(qMakePair(pFormatCtx->streams[i]->codec->codec_type, QString(crop_buf)));
 
-//		QTreeWidgetItem* stream = new QTreeWidgetItem(fields );
-//		container->addChild(stream);
 	}	   
-	return rez;
+	av_close_input_file(pFormatCtx);
 }
 
+
+QList<QPair<CodecType, QString> > 
+FileInfo::getStreams()
+{
+	return streams;
+}

@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QStringList>
 #include <QUrl>
+#include <QList>
 
 class SelectionFile 
 	: public QWidget
@@ -17,20 +18,21 @@ class SelectionFile
 	Q_OBJECT
 public:
  	SelectionFile (QString label, QWidget* parent = 0);
-	void fileDropped(QUrl file_url);//FIXME переделать в слоты
+public slots:
+	void fileDropped(QList<QUrl> files_url);
 private slots:
 	void showFileDialog();
-//	void emitFileChanged ();
 private:
 	QLineEdit* inputFilename;
 	QString label;
 signals:
-	void fileChanged(QString);
+	void fileChanged(QList<QUrl> );
 };
 
 QHBoxLayout* AddLabel(QWidget* w, QString label="without label");
 
 QStringList check_not_null (int x, QString key);
 
+QString num_to_string(int n);
 
 #endif

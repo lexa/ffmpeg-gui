@@ -20,6 +20,7 @@ extern "C" {
 #include <QComboBox>
 #include <QPair>
 #include <QtDebug>
+#include <QUrl>
 
 //#include <iostream>
 
@@ -61,7 +62,6 @@ enum Appointment {DECODE=1, ENCODE=2};
 class Codecs : public QObject//TODO подумать: может переделать на ф-ии ??
 {
 	Q_OBJECT
-	
 public:
 	Codecs(QObject* parent = 0);
 //	enum CodecType {CODEC_TYPE_SUBTITLE CODEC_TYPE_VIDEO CODEC_TYPE_AUDIO}
@@ -76,6 +76,16 @@ private:
 };
 
 
-QList<QPair<CodecType, QString> > FileInfo(QString filename);//Первый элемент в списке
+class FileInfo
+{
+public:
+	FileInfo(QUrl filename);
+	QString container () const;
+	QList<QPair<CodecType, QString> > getStreams();
+private:
+	QList<QPair<CodecType, QString> > streams;
+	QString container_;
+};
+
 
 #endif //FFMPEG_MY_H

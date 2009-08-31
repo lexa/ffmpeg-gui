@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QSplitter>
 #include <QMap>
+#include <QList>
+#include <QUrl>
 
 #include "FFMPEG.hpp"
 
@@ -47,21 +49,12 @@ class ChooseParameters :
 {
 	Q_OBJECT
 public:
-	ChooseParameters(QString filename, QWidget *parent = 0);
+	ChooseParameters(QList<QUrl> filenames, QWidget *parent = 0);
 	QStringList getParams();
-// signals:
-// 	void parametersChanged (QStringList);//испускается когда строка для кодирования меняется
-
-	// public slots:
-	// 	 void setFilename(QString filename);
-//private slots:
-//	void currentItemChanged (QTreeWidgetItem* current);//когда элемент из дерева выбирается
-//	void codecParametersChanged(int, QStringList);//собственно очерёдность потока и его параметры 
 private:
  	QTreeWidget *tree;
 	QSplitter* l;
-//	QList<QStringList> listParameters;
-	QString filename;
+	QList<QUrl> filenames;
 	QList <GenericChoose* > built_widgets;
 	QMap<CodecType, int> cnt_streams;//кол-во стримов каждого типа
 };

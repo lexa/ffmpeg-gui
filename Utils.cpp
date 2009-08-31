@@ -4,18 +4,30 @@ void
 SelectionFile::showFileDialog()
 {
 //	std::cerr << "file dialog" << std::endl;
-	QString filename = QFileDialog::getOpenFileName(this, label);
-//	qWarning() << filename ;
+	QStringList files = QFileDialog::getOpenFileNames(this, label);
+	
+	QList<QUrl> filenames;
 
-	inputFilename->setText(filename);
-//	std::cerr << "end" << std::endl;
+	QStringList::Iterator it = files.begin();
+	while(it != files.end()) {
+		filenames.append(QUrl(*it));
+		++it;
+	}
+
+	inputFilename->setText(files.join(","));
+	emit fileChanged(filenames);
 }
 
 
 void
-SelectionFile::fileDropped(QUrl url)
+SelectionFile::fileDropped(QList<QUrl> urls)
 {
-	inputFilename->setText(url.toString());
+	QString text;
+	foreach (QUrl url, urls)
+		text.append(url.toString());
+		
+	inputFilename->setText(text);
+	emit fileChanged(urls);
 }
 
 // void 
@@ -63,4 +75,11 @@ check_not_null (int x, QString key)
 	QStringList rez;
 	rez << ((x!=0)?key:"")  << ((x!=0)?str:"") ;
 	return rez;
+}
+
+QString num_to_string(int n)
+{
+	QString str;
+	str.setNum(n);
+	return str;
 }
