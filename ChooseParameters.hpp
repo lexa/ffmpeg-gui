@@ -49,13 +49,19 @@ class ChooseParameters :
 {
 	Q_OBJECT
 public:
-	ChooseParameters(QList<QUrl> filenames, QWidget *parent = 0);
+	ChooseParameters(QWidget *parent = 0);
+public slots:
+	void addUrl(QUrl);
+	void clear();
 	QStringList getParams();
 private:
+	int filenum;
  	QTreeWidget *tree;
-	QSplitter* l;
+//	QSplitter* l;
 	QList<QUrl> filenames;
 	QList <GenericChoose* > built_widgets;
+	ChooseFileFormat* container_tab;
+	QTabWidget* selectors;
 	QMap<CodecType, int> cnt_streams;//кол-во стримов каждого типа
 };
 

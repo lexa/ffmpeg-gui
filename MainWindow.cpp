@@ -3,17 +3,55 @@
 #include <iostream>
 
 
+void
+ChooseInputFiles::showFileDialog()
+{
+	QStringList files = QFileDialog::getOpenFileNames(this, label);
+	
+	QList<QUrl> filenames;
+
+	// QStringList::Iterator it = files.begin();
+	// while(it != files.end()) {
+	// 	filenames.append(QUrl(*it));
+	// 	++it;
+	// }
+	foreach(QString url, files) {
+		filenames.append(QUrl(url));
+	}
+
+//	inputFilename->setText(files.join(","));
+	emit fileChanged(filenames);
+}
+
+ChooseInputFiles::ChooseInputFiles (QString label, QWidget* parent)
+	:QWidget(parent)
+{
+//	QLabel *inputLabel = new QLabel(label);
+	this->label = label;
+	
+//	inputFilename = new QLineEdit;
+//	inputFilename->setReadOnly(true);
+	QPushButton* selectFile = new QPushButton(label);
+
+	QHBoxLayout *layoutFile = new QHBoxLayout;
+//	layoutFile->addWidget (inputLabel);
+//	layoutFile->addWidget (inputFilename);
+	layoutFile->addWidget (selectFile);
+
+	QObject::connect (selectFile, SIGNAL(clicked()), this, SLOT(showFileDialog()));
+//	QVBoxLayout *layoutMain = new QVBoxLayout;
+//	layoutMain->addLayout(layoutFile);
+	setLayout(layoutFile);
+}
+
+
+
 void 
 MainWindow::inputFileChanged(QList <QUrl> filenames)
 {	
 	qWarning() << "inputFileChanged";
-	layoutMain->removeWidget(params);
-	delete (params);
-	params = new ChooseParameters(filenames);
-	layoutMain->insertWidget(1, params, 1);
-//	QObject::connect (params, SIGNAL(parametersChanged(QStringList)), ffmpeg, SLOT(parametersChanged(QStringList))); 
-//	layoutMain->setStretch(1, 1);
-	
+	foreach (QUrl file, filenames)
+		params->addUrl(file);
 }
 
 
@@ -21,22 +59,20 @@ MainWindow::inputFileChanged(QList <QUrl> filenames)
 MainWindow::MainWindow (QWidget *parent)
 	:QWidget(parent)
 {
-	inputFile = new SelectionFile(tr("Input File:"));
-//	SelectionFile* outputFile = new SelectionFile(tr("Output File:"));
+//	inputFile = new SelectionFile();
+	ChooseInputFiles* addInputFiles = new ChooseInputFiles(tr("add files"));
+	QPushButton* clear = new QPushButton(tr("clear filelist"));
 	QHBoxLayout* top_line = new QHBoxLayout;
-	top_line->addWidget(inputFile);
-//	top_line->addWidget(outputFile);
+	top_line->addWidget(addInputFiles);
+	top_line->addWidget(clear);
 	top_line->addStretch(0);
 
-//	QObject::connect(outputFile, SIGNAL(fileChanged(QString)), this, SLOT(outputFileChanged(QString)));
-
 //	params = new ChooseParameters("/home/lexa/tmp/ffmpeg/movie.avi");
-	QList<QUrl> tmp;
-	params = new ChooseParameters(tmp);
+	params = new ChooseParameters;
 	layoutMain = new QVBoxLayout;
 
 	layoutMain->addLayout(top_line);
-	layoutMain->addWidget(params, 1);//FIXME убрать ???
+	layoutMain->addWidget(params, 1);
 	convert_button = new QPushButton(tr("Convert"));
 	ffmpeg = new StartFFMPEG;
 	layoutMain->addWidget(convert_button);
@@ -46,7 +82,8 @@ MainWindow::MainWindow (QWidget *parent)
 
 	setLayout(layoutMain);
 
-	QObject::connect (inputFile, SIGNAL(fileChanged(QList<QUrl>)), this, SLOT(inputFileChanged(QList<QUrl>)));
+	QObject::connect (addInputFiles, SIGNAL(fileChanged(QList<QUrl>)), this, SLOT(inputFileChanged(QList<QUrl>)));
+	QObject::connect (clear, SIGNAL(clicked()), params, SLOT(clear()));
 	QObject::connect (convert_button, SIGNAL(clicked()), this, SLOT(start_ffmpeg())); 
 	QObject::connect (ffmpeg, SIGNAL(stopped(int)), this, SLOT(ffmpeg_stopped())); 
 	setWindowTitle(tr("ffmpeg-gui"));
@@ -68,7 +105,8 @@ MainWindow::dragEnterEvent(QDragEnterEvent *event)
 void MainWindow::dropEvent(QDropEvent *event)
 {
 	qWarning() << event->mimeData()->text();
-	inputFile->fileDropped(event->mimeData()->urls());
+//	inputFile->fileDropped(event->mimeData()->urls());
+	inputFileChanged(event->mimeData()->urls());
 
 //	if (event->mimeData()->hasFormat("text/uri-list"))
 //		event->acceptProposedAction();

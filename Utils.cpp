@@ -43,6 +43,7 @@ SelectionFile::SelectionFile (QString label, QWidget* parent)
 	this->label = label;
 	
 	inputFilename = new QLineEdit;
+	inputFilename->setReadOnly(true);
 	QPushButton* selectFile = new QPushButton(tr("Select File"));
 
 	QHBoxLayout *layoutFile = new QHBoxLayout;
@@ -51,7 +52,6 @@ SelectionFile::SelectionFile (QString label, QWidget* parent)
 	layoutFile->addWidget (selectFile);
 
 	QObject::connect (selectFile, SIGNAL(clicked()), this, SLOT(showFileDialog()));
-	QObject::connect (inputFilename, SIGNAL(textChanged(QString)), this, SIGNAL(fileChanged(QString)) );
 	QVBoxLayout *layoutMain = new QVBoxLayout;
 	layoutMain->addLayout(layoutFile);
 	setLayout(layoutMain);

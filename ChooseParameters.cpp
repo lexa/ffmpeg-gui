@@ -8,37 +8,33 @@ EmptyChoose::EmptyChoose ( QWidget* parent)
 }
 //--------------------------------------------------------------------------------//
 
-ChooseParameters::ChooseParameters(QList<QUrl> filenames, QWidget *parent)
-	:QSplitter(parent)
+void 
+ChooseParameters::clear()
 {
-	this->filenames=filenames;
-	tree = new QTreeWidget;
-	tree->setColumnCount(2);
-	tree->setHeaderLabels(QStringList("type") << "value");
-	this->addWidget(tree);
-	QTabWidget* selectors = new QTabWidget;
-	this->addWidget(selectors);
-
-	GenericChoose* container_tab = new ChooseFileFormat;
+	filenum = 0;
+ 	tree->clear();
+	filenames.clear();
+	built_widgets.clear();
+	selectors->clear();
 	selectors->addTab(container_tab, tr("Container"));
+	cnt_streams.clear();
 
-	QUrl name;
-	FileInfo* info;
-	int filenum = 0;
-	foreach (name, filenames)
+}
+
+void 
+ChooseParameters::addUrl(QUrl url)
+{
+	filenames.append(url);
+	try
 	{
-		try{
-			info = new FileInfo (name);
-		}
-		catch (QString err) {
-			qWarning() << err << name;
-			continue;
-		}
+		FileInfo info(url);
 
-		QTreeWidgetItem* container = new QTreeWidgetItem(QStringList(name.toString()) << info->container());
+		QMap<CodecType, int> streams_in_file;//кол-во стримов каждого типа
+			
+		QTreeWidgetItem* container_tree = new QTreeWidgetItem(QStringList(url.toString()) << info.container());
+		
+		QList<QPair<CodecType, QString> > streams = info.getStreams();
 
-		QList<QPair<CodecType, QString> > streams = info->getStreams();
-	
 		for(int i=0 ; i < streams.length(); i++ )
 		{
 			QString name;
@@ -55,21 +51,46 @@ ChooseParameters::ChooseParameters(QList<QUrl> filenames, QWidget *parent)
 				name = "undefined type"; break ;
 			}
 			
-			QString b(name + num_to_string((cnt_streams[streams[i].first])++));
+			QString b(name + num_to_string(filenum) + ":" + num_to_string((streams_in_file[streams[i].first])++));
 			QStringList fields(b);
+
 			selectors->addTab(item, b);
 			built_widgets.append(item);
 			
 			fields << streams[i].second;
-			container->addChild(new QTreeWidgetItem(fields));
+			container_tree->addChild(new QTreeWidgetItem(fields));
+
+			tree->addTopLevelItem (container_tree);
+			container_tree->setExpanded(true);
+			(cnt_streams[streams[i].first])++;
 		}
-			    
-		tree->addTopLevelItem (container);
-		container->setExpanded(true);
-		delete (info);
 		filenum++;
 	}
-	built_widgets.append(container_tab);
+	catch (QString err)
+	{
+		tree->addTopLevelItem (new QTreeWidgetItem(QStringList(url.toString()) << err));
+	}
+
+}
+
+ChooseParameters::ChooseParameters(QWidget *parent)
+	:QSplitter(parent)
+{
+	tree = new QTreeWidget;
+	tree->setColumnCount(2);
+	tree->setHeaderLabels(QStringList("type") << "value");
+	this->addWidget(tree);
+	selectors = new QTabWidget;
+	this->addWidget(selectors);
+
+	container_tab = new ChooseFileFormat;
+	selectors->addTab(container_tab, tr("Container"));
+
+
+
+	filenum = 0;
+//--end--here--
+//	built_widgets.append(container_tab);
 }
 
 QStringList 
@@ -86,20 +107,23 @@ ChooseParameters::getParams()
 	GenericChoose* w;
 	foreach (w, built_widgets) 
 	{
-		tmp.append(w->getParams());
+		tmp << (w->getParams());
 	}
+	tmp << container_tab->getParams();
+
 	int i=1;
 	while (cnt_streams[CODEC_TYPE_VIDEO] > i) 
 	{
-		tmp.append("-newvideo");
+		tmp << ("-newvideo");
 		i++;
 	}
 	i=1;
 	while (cnt_streams[CODEC_TYPE_AUDIO] > i) 
 	{
-		tmp.append("-newaudio");
+		tmp << ("-newaudio");
 		i++;
 	}
+
 
 	qWarning() << "ffmpeg parameters : "<< tmp;
 //	emit parametersChanged(tmp);

@@ -37,6 +37,23 @@ extern "C" {
 #include "Utils.hpp"
 #include "StartFFmpeg.hpp"
 
+
+class ChooseInputFiles
+	: public QWidget
+{
+	Q_OBJECT
+public:
+ 	ChooseInputFiles (QString label, QWidget* parent = 0);
+private slots:
+	void showFileDialog();
+private:
+//	QLineEdit* inputFilename;
+	QString label;
+signals:
+	void fileChanged(QList<QUrl> );
+};
+
+
 class MainWindow 
 	: public QWidget
 {
@@ -52,7 +69,7 @@ private:
 	QVBoxLayout* layoutMain;
 	StartFFMPEG* ffmpeg;
 	QPushButton* convert_button;
-	SelectionFile* inputFile;
+//	SelectionFile* inputFile;
 	void dropEvent(QDropEvent *event);
 	void dragEnterEvent(QDragEnterEvent *event);
 
