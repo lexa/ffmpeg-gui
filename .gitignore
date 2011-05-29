@@ -8,4 +8,6 @@
 /cmake_install.cmake
 /Makefile/ui_ChooseFileFormat.h
 /ui*.h
+/*.gch
 /Makefile
+

@@ -1,25 +1,26 @@
 #include <QApplication>
-#include <QFont>
-#include <QPushButton>
-#include <QWidget>
+
+
 #include "MainWindow.hpp"
-//#include "FFMPEG.hpp"
+#include "FileList.hpp"
+
+#include "FFMPEG.hpp"
+
+
+class test_class 
+{
+public:
+	GUI::FileList *treeWidget;
+};
+	
 
 
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
-	MainWindow* window = new MainWindow();
+	GUI::MainWindow* window = new GUI::MainWindow();
 	window->show();
 
-//	FileFormats  tmp1;
-//	qWarning() <<  tmp1.getAvailableEncodeFileFormats();
-	//FileInfo fileInfo;
-
-	 //fileInfo.setFilename("/home/lexa/tmp/ffmpeg/movie.avi");
-	
-//	Codecs tmp;
-//	qWarning() << tmp.getAvailableCodecs(CODEC_TYPE_VIDEO, ENCODE);
 	return app.exec();
-//	return av_exit(0);
 }
+

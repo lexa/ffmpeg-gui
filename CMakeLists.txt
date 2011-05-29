@@ -4,17 +4,16 @@ set( CMAKE_MODULE_PATH ".")
 Project (ffmpeg-gui)
 
 
+# ADD_DEFINITIONS( "-Wall -std=gnu++0x -pedantic -ggdb -Weffc++ -Wextra")
 ADD_DEFINITIONS( "-Wall -std=gnu++0x -pedantic -ggdb")
 find_package(Qt4 4.5.1 COMPONENTS QtCore QtGui REQUIRED )
 include(${QT_USE_FILE} )
 link_directories (${QT_LIBRARY_DIR})
 
-SET(MOC_HEADERS  ./MainWindow.hpp ./FFMPEG.hpp ./ChooseParameters.hpp ./ChooseAudioCodec.hpp ./ChooseVideoCodec.hpp ./ChooseFileFormat.hpp ./Utils.hpp ./StartFFmpeg.hpp ChooseGeneric.hpp)
+SET(MOC_HEADERS  ./MainWindow.hpp  ./Utils.hpp ./FileList.hpp ./FFMPEG.hpp ./Global.hpp)
 
 SET( UIS
-./ChooseFileFormat.ui
-./ChooseVideoCodec.ui
-./ChooseAudioCodec.ui
+./MainWindow.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS ${MOC_HEADERS} )
@@ -24,7 +23,7 @@ find_package(FFMPEG)
 include_directories(${FFMPEG_INCLUDE_DIR})
 link_directories(${FFMPEG_LIBRARY_DIR})
 
-Add_Executable(main main.cpp MainWindow.cpp  ChooseParameters.cpp ChooseAudioCodec.cpp ChooseVideoCodec.cpp ChooseFileFormat.cpp Utils.cpp FFMPEG StartFFmpeg.cpp  ChooseGeneric.cpp ${UI_HEADERS}  ${MOC_SRCS})
+Add_Executable(main Utils.cpp FileList.cpp  FFMPEG.cpp main.cpp MainWindow.cpp   ${UI_HEADERS}  ${MOC_SRCS})
 TARGET_LINK_LIBRARIES( main ${FFMPEG_LIBRARIES} ${QT_LIBRARIES} ) #${FFMPEG_LIBRARIES} ${QT_LIBRARIES} )
 
 

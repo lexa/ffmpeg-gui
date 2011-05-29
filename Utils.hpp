@@ -1,6 +1,8 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+#include "Global.hpp"
+
 #include <QWidget>
 #include <QString>
 #include <QLineEdit>
@@ -12,27 +14,37 @@
 #include <QUrl>
 #include <QList>
 
-class SelectionFile 
-	: public QWidget
+
+
+
+
+template <class T>
+class Singleton 
 {
-	Q_OBJECT
-public:
- 	SelectionFile (QString label, QWidget* parent = 0);
-public slots:
-	void fileDropped(QList<QUrl> files_url);
-private slots:
-	void showFileDialog();
 private:
-	QLineEdit* inputFilename;
-	QString label;
-signals:
-	void fileChanged(QList<QUrl> );
+	static T *self_ptr;
+
+public:
+	inline static T* Instance() 
+		{
+			if (NULL == self_ptr )
+				self_ptr = new T;
+			return self_ptr;
+
+		};
+protected:
+	Singleton() {}; //1
+	
+	virtual ~Singleton() {qDebug() << "singleton destroyed";};
+//	virtual ~Singleton() {qDebug() << "singleton destroyed"; Singleton<T>::self_ptr = NULL;};
+private:
+	Singleton(T&);
+	Singleton(T*);
+	void operator= (T&);
 };
 
-QHBoxLayout* AddLabel(QWidget* w, QString label="without label");
+template <class T>
+T* Singleton<T>::self_ptr = NULL;
 
-QStringList check_not_null (int x, QString key);
 
-QString num_to_string(int n);
-
-#endif
+#endif //UTILS_H_
